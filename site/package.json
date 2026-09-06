@@ -11,7 +11,9 @@
     "start": "vinext start",
     "lint": "oxlint",
     "format": "oxfmt",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "predev": "node ../scripts/sync-search-index.mjs",
+    "prebuild": "node ../scripts/sync-search-index.mjs"
   },
   "dependencies": {
     "react": "19.2.6",

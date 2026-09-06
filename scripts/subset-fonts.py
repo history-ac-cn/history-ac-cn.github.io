@@ -10,7 +10,7 @@ out = ROOT / 'site/public/assets/fonts'
 texts = [chr(i) for i in range(32, 127)]
 for folder in ['app', 'components', 'lib', 'content']:
     for p in (ROOT / 'site' / folder).rglob('*'):
-        if p.suffix in {'.tsx', '.ts', '.json', '.css'}: texts.append(p.read_text())
+        if p.suffix in {'.tsx', '.ts', '.mjs', '.json', '.css'}: texts.append(p.read_text())
 texts.append('暂时没有找到相关内容全部篇文章搜索回到顶部关闭菜单打开菜单字分钟阅读年代来源存档资料正文放大缩小首页')
 text = ''.join(texts)
 css = []; info = []

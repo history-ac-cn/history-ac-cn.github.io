@@ -1,14 +1,24 @@
-import articles from '@/content/articles.json';
-export { articles };
+import recoveredArticles from '@/content/articles.json';
+import additions from '@/content/additions.json';
+export const recoveredArticleCount = recoveredArticles.length;
+// Keep the recovered corpus intact; subsequent editorial additions live separately.
+export const articles = [...recoveredArticles, ...additions];
+export const modernCategory = '现代史·大事记';
+export const displayCategory = (name: string) => ['现代史', '大事记', modernCategory].includes(name) ? modernCategory : name;
+export const articlesForCategory = (name: string) => articles.filter(a => displayCategory(a.category) === displayCategory(name)).sort((a, b) => {
+  if (displayCategory(name) !== modernCategory) return 0;
+  const order = (item: typeof a) => item.id === '214' ? -2 : item.id === '196' ? -1 : Number(item.title.match(/（(\d{4})年）/)?.[1] || 0);
+  return order(a) - order(b);
+});
 export const archiveUrl = 'https://web.archive.org/web/20210419051634/https://www.history.ac.cn/';
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 export const asset = (path: string) => `${basePath}${path}`;
 export const categories = [
   { name: '古代史', en: 'ANCIENT CHINA', number: '01', range: '远古 — 1840', title: '文明的起源与传承', description: '从先民的足迹到王朝的更迭，追寻中华文明绵延不绝的脉络。', overview: '256' },
   { name: '近代史', en: 'MODERN CHINA', number: '02', range: '1840 — 1949', title: '变局中的探索与觉醒', description: '从鸦片战争到新中国成立，读懂百余年间的变革、抗争与求索。', overview: '240' },
-  { name: '现代史', en: 'CONTEMPORARY CHINA', number: '03', range: '1949 —', title: '建设与发展的历程', description: '回望新中国的建设历程，在时代的转折中理解今日中国。', overview: '214' },
+  { name: modernCategory, en: 'CONTEMPORARY CHINA & CHRONICLES', number: '03', range: '1949 —', title: '建设与发展的历程', description: '从中国现代史出发，以年为序，在一个个具体的日子里理解时代的变迁。', overview: '214' },
 ];
-export const categoryHref = (name: string) => `/archives/category/${name}/`;
+export const categoryHref = (name: string) => `/archives/category/${displayCategory(name)}/`;
 export const articleHref = (id: string) => `/archives/${id}/`;
 export const shortTitle = (title: string) => title.includes('——') ? title.split('——')[1].replace('（鸦片战争以前）', '') : title;
 export const periods: Record<string, string> = {

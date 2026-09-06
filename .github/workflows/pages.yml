@@ -42,7 +42,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
         with:
-          path: preview
+          path: site/dist/pages
   deploy:
     if: github.event_name != 'pull_request'
     needs: build

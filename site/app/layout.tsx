@@ -3,7 +3,7 @@ import { SiteHeader, SiteFooter } from '@/components/site-header';
 import './globals.css';
 export const metadata: Metadata = {
   title: { default: '中国历史学习网 · 读懂千年中国史', template: '%s · 中国历史学习网' },
-  description: '始于2019年的中国历史学习网。阅读古代史、近代史、现代史与历年大事记，在简洁、无广告的空间里理解中国历史。',
+  description: '始于2019年的中国历史学习网。阅读古代史、近代史、现代史·大事记，在简洁、无广告的空间里理解中国历史。',
   icons: { icon: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/logo.png` },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {

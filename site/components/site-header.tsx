@@ -1,9 +1,9 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, Menu, X, ArrowUpRight } from 'lucide-react';
+import { Search, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-const nav = [['首页', '/'], ['古代史', '/archives/category/古代史/'], ['近代史', '/archives/category/近代史/'], ['现代史', '/archives/category/现代史/'], ['大事记', '/archives/category/大事记/'], ['关于', '/about/']];
+const nav = [['首页', '/'], ['古代史', '/archives/category/古代史/'], ['近代史', '/archives/category/近代史/'], ['现代史·大事记', '/archives/category/现代史·大事记/'], ['关于', '/about/']];
 export function SiteHeader() {
   const path = usePathname(); const [open, setOpen] = useState(false);
   const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -14,5 +14,5 @@ export function SiteHeader() {
   </div></header>;
 }
 export function SiteFooter() {
-  return <footer className="site-footer"><div className="shell footer-main"><div><Link href="/" className="footer-brand">中国历史学习网<span>HISTORY.AC.CN</span></Link><p>让历史触手可及，让热爱一直延续。</p></div><div className="footer-links"><Link href="/about/">关于本站</Link><Link href="/about/#sources">资料来源</Link><a href="https://web.archive.org/web/20210419051634/https://www.history.ac.cn/" target="_blank" rel="noreferrer">旧站存档 <ArrowUpRight size={14}/></a></div></div><div className="shell footer-bottom"><span>始于 2019 · 因热爱而生</span><span>无广告 · 自由阅读</span></div></footer>;
+  return <footer className="site-footer"><div className="shell footer-main"><div><Link href="/" className="footer-brand">中国历史学习网<span>HISTORY.AC.CN</span></Link><p>半小时搞定千年中国史</p></div><div className="footer-links"><Link href="/about/">关于本站</Link></div></div><div className="shell footer-bottom"><a className="icp-link" href="http://www.miitbeian.gov.cn/" target="_blank" rel="noreferrer">京ICP备19010237号</a><span>无广告 · 自由阅读</span></div></footer>;
 }
