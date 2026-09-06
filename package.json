@@ -1,0 +1,12 @@
+{
+  "name": "chinese-history-learning-network",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix site run dev",
+    "build": "npm --prefix site run build && node scripts/make-portable.mjs && python3 scripts/verify-portable.py && node scripts/verify-interactions.mjs",
+    "verify": "python3 scripts/verify-portable.py && node scripts/verify-interactions.mjs",
+    "typecheck": "npm --prefix site run typecheck"
+  }
+}

@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+site/dist/
+site/.next/
+site/.wrangler/
+site/*.tsbuildinfo
+site/.vite/
+*.log
+.env
+.env.*
+!.env.example
