@@ -5,7 +5,7 @@ import { formatChronicle } from '../site/lib/chronicles.mjs';
 const script = fs.readFileSync(new URL('../site/public/assets/navigation.js', import.meta.url), 'utf8');
 function run(href, { notFound, redirectHref, retiredArticleHref, baseURI } = {}) {
   const url = new URL(href), changes = {};
-  const link = { attributes: { 'data-file-href': '../archives/2007/index.html' }, getAttribute(name) { return this.attributes[name]; }, setAttribute(name, value) { this.attributes[name]=value; } };
+  const link = { attributes: { 'data-file-href': '../archives/71/index.html' }, getAttribute(name) { return this.attributes[name]; }, setAttribute(name, value) { this.attributes[name]=value; } };
   const location = { href, protocol:url.protocol, search:url.search, hash:url.hash, replace(value) { changes.redirect=value; } };
   const history = { state: { preserved: true }, replaceState(state,_,value) { changes.address=value; changes.state=state; } };
   const document = { baseURI: baseURI || href, documentElement: { dataset: { notFound, redirectHref, retiredArticleHref } }, querySelectorAll() { return [link]; } };
@@ -13,11 +13,12 @@ function run(href, { notFound, redirectHref, retiredArticleHref, baseURI } = {})
   return { ...changes, link };
 }
 assert.equal(run('https://example.com/index.html?q=秦#main').address, 'https://example.com/?q=%E7%A7%A6#main');
-assert.equal(run('https://example.github.io/history/archives/2007/index.html?q=test#chronicle-event-01').address, 'https://example.github.io/history/archives/2007/?q=test#chronicle-event-01');
-assert.equal(run('https://example.github.io/history/archives/2007/index', { notFound:'true' }).redirect, 'https://example.github.io/history/archives/2007/');
-assert.equal(run('https://example.com/archives/2007/index.html/', { notFound:'true' }).redirect, 'https://example.com/archives/2007/');
-assert.equal(run('https://example.com/archives/2007/?q=test#month').address, undefined);
-assert.equal(run('file:///Users/me/history/index.html').link.attributes.href, '../archives/2007/index.html');
+assert.equal(run('https://example.github.io/history/archives/71/index.html?q=test#chronicle-event-01').address, 'https://example.github.io/history/archives/71/?q=test#chronicle-event-01');
+assert.equal(run('https://example.github.io/history/archives/71/index', { notFound:'true' }).redirect, 'https://example.github.io/history/archives/71/');
+assert.equal(run('https://example.com/archives/71/index.html/', { notFound:'true' }).redirect, 'https://example.com/archives/71/');
+assert.equal(run('https://example.com/archives/71/?q=test#month').address, undefined);
+assert.equal(run('https://example.com/archives/2007/', { notFound:'true' }).redirect, undefined);
+assert.equal(run('file:///Users/me/history/index.html').link.attributes.href, '../archives/71/index.html');
 assert.equal(run('file:///Users/me/history/index.html').address, undefined);
 assert.equal(run('https://example.com/about/').link.attributes.href, undefined);
 assert.equal(run('https://example.com/archives/category/old/index.html?q=a#decade-2000', { redirectHref:'../combined/index.html' }).redirect, 'https://example.com/archives/category/combined/?q=a#decade-2000');

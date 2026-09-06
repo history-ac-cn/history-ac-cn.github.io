@@ -85,6 +85,7 @@ for (const file of htmlFiles) {
     if (current === destination) return `<a${attrs} aria-current="page">`;
     return a;
   }));
+  html = html.replace('</head>', `<script src="${toRelative('/assets/theme.js', relative)}"></script></head>`);
   const scripts = `<script src="${toRelative('/assets/navigation.js', relative)}" defer></script>` + (relative.startsWith('search/') ? `<script src="${toRelative('/assets/search-index.js', relative)}" defer></script>` : '') + `<script src="${toRelative('/assets/site.js', relative)}" defer></script>`;
   html = html.replace('</body>', scripts + '</body>');
   await write(relative, html);

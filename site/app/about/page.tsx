@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowUpRight, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, Monitor, Sun, Moon } from 'lucide-react';
 import { archiveUrl, asset, absoluteUrl } from '@/lib/content';
 import { openGraph, twitterCard } from '@/lib/seo';
 const description = '了解中国历史学习网从高中时期创办、因服务器关闭而丢失，到依据 Internet Archive 存档重建的故事。';
@@ -22,6 +22,7 @@ export default function About() {
         <section><h2>失而复得的 83 篇文章</h2><p>在原站点运行了两三年之后，服务器价格突然大幅上涨，原先的网站未能继续保留，服务器上的内容也随之丢失。幸好，Internet Archive 保存下了它曾经的样子。</p><p>这一次重建完成于 2026 年 9 月 6 日，从 2021 年 4 月 19 日的首页快照中找回了 83 篇正文，覆盖中国历史概览、古代史、近代史、现代史，以及中华人民共和国大事记。原来绘制的蓝色环带地球，也在新的标志里得到延续。</p><a className="text-link" href={archiveUrl} target="_blank" rel="noreferrer">看看网站在 Internet Archive 存档里的模样 <ArrowUpRight size={15}/></a></section>
         <section id="sources"><h2>关于这里的资料</h2><p>历史资料主要整理、转载自《中华人民共和国年鉴》《中华人民共和国大事记》等文献，版权归原作者所有。本次重建保留原文及原站的来源标注，网页样式与阅读目录重新设计。</p><p>恢复的资料具有其写作年代的表述与信息边界，不等同于经过重新编审的当代历史研究。涉及具体史实、历史分期或学术观点时，建议结合最新教材、原始史料与研究成果阅读。</p><div className="source-facts"><div><strong>83 篇</strong><span>恢复的存档文章</span></div><div><strong>2021.04.19</strong><span>首页存档日期</span></div><div><strong>1949—2009</strong><span>大事记范围</span></div></div></section>
         <section><h2>简单一点，长久一点</h2><p>没有广告，也没有与阅读无关的干扰。你可以在线翻阅，也可以将整个网站保存在自己的电脑上，随时打开。希望这个小小的历史学习空间，能陪伴每一位好奇的读者。</p><Link className="text-link" href="/">回到首页，继续阅读 <ArrowRight size={15}/></Link></section>
+        <section className="theme-preferences" aria-labelledby="theme-heading"><h2 id="theme-heading">外观</h2><p>网站默认跟随系统外观。你也可以为这台设备单独选择浅色或深色模式。</p><div className="theme-options" role="group" aria-label="网站外观"><button className="theme-choice" type="button" data-theme-choice="system" aria-pressed="true"><Monitor size={18}/> 跟随系统</button><button className="theme-choice" type="button" data-theme-choice="light" aria-pressed="false"><Sun size={18}/> 浅色</button><button className="theme-choice" type="button" data-theme-choice="dark" aria-pressed="false"><Moon size={18}/> 深色</button></div><p className="theme-status" id="theme-status" aria-live="polite">当前：跟随系统</p></section>
       </div>
     </div>
   </main>;

@@ -106,7 +106,8 @@ const expectedUrls = canonicalRoutes.map(absolute);
 check(sitemapUrls.length === expectedUrls.length, `Sitemap contains ${sitemapUrls.length} URLs; expected ${expectedUrls.length}.`);
 check(new Set(sitemapUrls).size === sitemapUrls.length, 'Sitemap contains duplicate URLs.');
 for (const url of expectedUrls) check(sitemapUrls.includes(url), `Sitemap is missing ${url}.`);
-check(!sitemapUrls.some(url => /\/search\/|\/archives\/196\/|\/category\/(?:%E7%8E%B0%E4%BB%A3%E5%8F%B2|%E5%A4%A7%E4%BA%8B%E8%AE%B0)\/$/.test(url)), 'Sitemap includes a noindex or retired route.');
+check(!sitemapUrls.some(url => /\/search\/|\/archives\/(?:196|2007)\/|\/category\/(?:%E7%8E%B0%E4%BB%A3%E5%8F%B2|%E5%A4%A7%E4%BA%8B%E8%AE%B0)\/$/.test(url)), 'Sitemap includes a noindex or retired route.');
+check(sitemapUrls.includes(absolute('/archives/71/')), 'Sitemap must publish the 2007 chronicle as article 71.');
 
 const robots = await fs.readFile(path.join(output, 'robots.txt'), 'utf8');
 check(/^User-agent: \*$/m.test(robots) && /^Allow: \/$/m.test(robots), 'robots.txt must allow public crawling.');
