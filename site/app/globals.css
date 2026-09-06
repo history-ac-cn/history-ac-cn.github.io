@@ -23,7 +23,7 @@
 .about-body .original-about p:last-of-type{margin-bottom:17px}
 .about-body .original-about cite{font-size:13px}
 .chronicle-opening{align-items:center}.chronicle-opening>div{flex:1}.chronicle-opening>svg{margin-top:0}.chronicle-opening .eyebrow{font-size:13px;letter-spacing:1px;margin:0}.chronicle-opening:hover{background:#e9f3f9}.opening-action{display:flex;align-items:center;gap:12px;white-space:nowrap;font-size:13px}
-.prose p.chronicle-event{margin:0 0 1.6em}.prose .chronicle-source{font-family:'History Sans',sans-serif;font-size:inherit;color:#8a9da8;line-height:1.9}
+.prose p.chronicle-event{margin:0 0 1.6em}.prose .chronicle-source{font-size:inherit;color:#8a9da8;line-height:1.9}
 .icp-link:hover{color:var(--blue)}
 .era-card h3{gap:12px}.era-card h3 svg{flex-shrink:0}.timeline-name{gap:12px}.timeline-name svg{flex-shrink:0}
 @media(max-width:1100px){.era-card h3{font-size:25px;letter-spacing:1px}.timeline-name{font-size:22px}}
