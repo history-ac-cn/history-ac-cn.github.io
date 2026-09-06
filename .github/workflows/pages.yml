@@ -38,6 +38,7 @@ jobs:
         env:
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PAGES_BUILD: ${{ github.event_name != 'pull_request' }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || 'https://www.history.ac.cn' }}
       - name: Upload the static site
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4

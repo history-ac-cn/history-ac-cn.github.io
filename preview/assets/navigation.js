@@ -20,6 +20,14 @@
     if (target.href !== location.href) location.replace(target.href);
     return;
   }
+  const retiredArticle = document.documentElement.dataset.retiredArticleHref;
+  if (web && retiredArticle && document.documentElement.dataset.notFound === 'true' && /\/archives\/196\/$/.test(clean(location.href).pathname)) {
+    const destination = clean(new URL(retiredArticle, document.baseURI || location.href));
+    destination.search = location.search;
+    destination.hash = location.hash;
+    location.replace(destination.href);
+    return;
+  }
   if (!web) return;
   const canonical = clean(location.href);
   if (canonical.href === location.href) return;

@@ -14,10 +14,10 @@ class Page(HTMLParser):
         if tag=='html': self.html_attrs=a
         if 'id' in a: self.ids.add(a['id'])
         for key in ['href','src','data-file-href','data-redirect-href']:
-            if key in a: self.references.append((tag,key,a[key]))
+            if key in a: self.references.append((tag,key,a[key],a.get('rel','')))
         if tag=='script':
             self.in_script=True
-            if a.get('type')=='module' or 'src' not in a: self.modules.append(a)
+            if a.get('type')!='application/ld+json' and (a.get('type')=='module' or 'src' not in a): self.modules.append(a)
     def handle_endtag(self,tag):
         if tag=='script': self.in_script=False
     def handle_data(self,d):
@@ -30,13 +30,18 @@ for p in (SITE / name for name in generated if name.endswith('.html')):
     if parser.html_attrs.get('lang')!='zh-CN': errors.append(f'Missing language: {p}')
     if 'main' not in parser.ids: errors.append(f'Missing main: {p}')
 for p,parser in parsed.items():
-    for tag,key,url in parser.references:
+    for tag,key,url,rel_value in parser.references:
         if tag=='base': continue
         if tag=='a' and key=='href' and not urlsplit(url).scheme:
             assert not re.search(r'(?:^|/)index(?:\.html)?(?:[?#]|$)',url), 'Online link should be clean: ' + url
         parts=urlsplit(url)
         if parts.scheme or parts.netloc:
-            if key=='src' or tag=='link': errors.append(f'External dependency: {url}')
+            if key=='src': errors.append(f'External dependency: {url}')
+            elif tag=='link':
+                # Canonical and author links are crawl metadata, not resources the
+                # browser must download for the portable copy to work.
+                rel=set(rel_value.lower().split())
+                if not rel.intersection({'canonical','author'}): errors.append(f'External dependency: {url}')
             continue
         if url.startswith('/'): errors.append(f'Absolute local reference: {p.name}: {url}'); continue
         dest=(p.parent / unquote(parts.path)).resolve() if parts.path else p
@@ -46,7 +51,7 @@ for p,parser in parsed.items():
             errors.append(f'Missing anchor: {p.relative_to(SITE)} -> {url}')
 recovered=json.loads((ROOT/'site/content/articles.json').read_text())
 assert len(recovered)==83
-articles=recovered+json.loads((ROOT/'site/content/additions.json').read_text())
+articles=[a for a in recovered+json.loads((ROOT/'site/content/additions.json').read_text()) if a['id']!='196']
 def unwrap_source(line):
     pairs={'（':'）','(':')'}
     return line[1:-1].strip() if line and pairs.get(line[0])==line[-1] else line
@@ -68,7 +73,7 @@ for a in articles:
         if re.sub(r'\s+','', ''.join(content.text)) != re.sub(r'\s+','',expected): errors.append(f'Altered or truncated content {a["id"]}')
         if re.search(r'（\d{4}年）',a['title']) and sources:
             source_position=markup.find('class="chronicle-source"')
-            event_position=markup.find('class="chronicle-month"')
+            event_position=markup.find('class="chronicle-event"')
             if source_position < 0 or event_position < 0 or source_position > event_position:
                 errors.append(f'Source is not first in chronicle {a["id"]}')
 font_css=(SITE/'assets/fonts/embedded.css').read_text()
@@ -76,17 +81,20 @@ assert font_css.count('data:font/woff2;base64,')==2
 assert 'https://' not in font_css
 assert 'src="preview/assets/site.js"' in (ROOT/'index.html').read_text()
 root_parser=Page(); root_parser.feed((ROOT/'index.html').read_text())
-for tag,key,url in root_parser.references:
+for tag,key,url,_ in root_parser.references:
     parts=urlsplit(url)
     if not parts.scheme and not parts.netloc and parts.path:
         dest=ROOT / unquote(parts.path)
         if dest.is_dir(): dest=dest/'index.html'
         assert dest.is_file(), 'Root entry broken: ' + url
 assert (SITE/'assets/search-index.js').is_file()
-assert 'data-file-href="../2007/index.html">2007</a>' in (SITE/'archives/196/index.html').read_text(), 'Chronicle overview must link to 2007'
 modern=(SITE/'archives/category/现代史·大事记/index.html').read_text()
 assert 'chronicle-opening' in modern and 'chronicle-intro' in modern
 assert modern.count('分钟阅读')==61, 'All 61 years from 1949 to 2009 must be present'
+assert 'data-file-href="../../2007/index.html"' in modern, 'Chronicle category must link to 2007'
+assert not (SITE/'archives/196').exists(), 'Retired chronicle overview must not be published'
+assert '"id":"196"' not in (SITE/'assets/search-index.js').read_text(), 'Retired chronicle overview must not be searchable'
+assert 'data-retired-article-href=' in (SITE/'404.html').read_text(), 'Legacy article redirect must be available from the 404 page'
 assert '存档暂缺' not in modern and '2007 年暂缺' not in modern
 assert '以下按原站内容整理' not in modern
 about=(SITE/'about/index.html').read_text()
@@ -97,4 +105,4 @@ assert '2007 年暂缺' not in about and '目前没有恢复出' not in about
 assert '中国历史学习网（Chinese History Learning Network）是一个没有任何广告的非盈利性质网站' in about
 if errors:
     print('\n'.join(errors)); raise SystemExit(f'{len(errors)} portable checks failed')
-print(f'PASS: {len(parsed)} HTML pages; all local assets, links and anchors resolve; all {len(articles)} articles present (83 recovered); two embedded fonts; no module scripts or network dependencies.')
+print(f'PASS: {len(parsed)} HTML pages; all local assets, links and anchors resolve; all {len(articles)} published articles present (83 recovered records retained); two embedded fonts; no module scripts or network dependencies.')

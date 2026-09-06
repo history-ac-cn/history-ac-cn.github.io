@@ -1,11 +1,20 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
-import { archiveUrl, asset } from '@/lib/content';
-export const metadata = { title: '关于本站' };
+import { archiveUrl, asset, absoluteUrl } from '@/lib/content';
+import { openGraph, twitterCard } from '@/lib/seo';
+const description = '了解中国历史学习网从高中时期创办、因服务器关闭而丢失，到依据 Internet Archive 存档重建的故事。';
+export const metadata: Metadata = {
+  title: '关于本站',
+  description,
+  alternates: { canonical: absoluteUrl('/about/') },
+  openGraph: openGraph('关于中国历史学习网', description, absoluteUrl('/about/')),
+  twitter: twitterCard('关于中国历史学习网', description),
+};
 export default function About() {
   return <main id="main" className="shell inner-page about-page">
     <div className="breadcrumbs"><Link href="/">首页</Link><span>/</span><span>关于</span></div>
-    <header className="page-heading"><span className="eyebrow">A LITTLE WEBSITE, A LASTING LOVE</span><h1>因为热爱，所以还在。</h1><p>一个始于 2019 年左右的历史网站，一段重新续写的故事。</p></header>
+    <header className="page-heading"><span className="eyebrow">A LITTLE WEBSITE, A LASTING LOVE</span><h1>因为热爱，所以还在。</h1><p>一个始于 2019 年 3 月 16 日的历史网站，一段重新续写的故事。</p></header>
     <div className="about-layout">
       <aside className="about-mark"><img src={asset('/assets/logo.png')} width="160" height="160" alt="延续原版蓝色环带地球的新版标志"/><span>中国历史学习网</span><small>HISTORY.AC.CN · EST. 2019</small></aside>
       <div className="about-body">

@@ -2,17 +2,20 @@ import recoveredArticles from '@/content/articles.json';
 import additions from '@/content/additions.json';
 export const recoveredArticleCount = recoveredArticles.length;
 // Keep the recovered corpus intact; subsequent editorial additions live separately.
-export const articles = [...recoveredArticles, ...additions];
+export const excludedArticleIds = new Set(['196']);
+export const articles = [...recoveredArticles, ...additions].filter(article => !excludedArticleIds.has(article.id));
 export const modernCategory = '现代史·大事记';
 export const displayCategory = (name: string) => ['现代史', '大事记', modernCategory].includes(name) ? modernCategory : name;
 export const articlesForCategory = (name: string) => articles.filter(a => displayCategory(a.category) === displayCategory(name)).sort((a, b) => {
   if (displayCategory(name) !== modernCategory) return 0;
-  const order = (item: typeof a) => item.id === '214' ? -2 : item.id === '196' ? -1 : Number(item.title.match(/（(\d{4})年）/)?.[1] || 0);
+  const order = (item: typeof a) => item.id === '214' ? -1 : Number(item.title.match(/（(\d{4})年）/)?.[1] || 0);
   return order(a) - order(b);
 });
 export const archiveUrl = 'https://web.archive.org/web/20210419051634/https://www.history.ac.cn/';
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.history.ac.cn').replace(/\/$/, '');
 export const asset = (path: string) => `${basePath}${path}`;
+export const absoluteUrl = (path = '/') => `${siteUrl}${path.startsWith('/') ? path : `/${path}`}`;
 export const categories = [
   { name: '古代史', en: 'ANCIENT CHINA', number: '01', range: '远古 — 1840', title: '文明的起源与传承', description: '从先民的足迹到王朝的更迭，追寻中华文明绵延不绝的脉络。', overview: '256' },
   { name: '近代史', en: 'MODERN CHINA', number: '02', range: '1840 — 1949', title: '变局中的探索与觉醒', description: '从鸦片战争到新中国成立，读懂百余年间的变革、抗争与求索。', overview: '240' },

@@ -1,9 +1,25 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, ArrowUpRight, ChevronRight, BookOpen } from 'lucide-react';
-import { categories, articleHref, categoryHref, periods, shortTitle, displayCategory, modernCategory, articlesForCategory } from '@/lib/content';
+import { categories, articleHref, categoryHref, periods, shortTitle, displayCategory, modernCategory, articlesForCategory, absoluteUrl } from '@/lib/content';
+import { openGraph, twitterCard } from '@/lib/seo';
 export function generateStaticParams() { return [...categories.map(c => ({ category: c.name })), { category: '现代史' }, { category: '大事记' }]; }
-export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) { return { title: displayCategory(decodeURIComponent((await params).category)) }; }
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const requestedName = decodeURIComponent((await params).category);
+  const name = displayCategory(requestedName);
+  const info = categories.find(category => category.name === name);
+  const description = name === modernCategory ? '从中国现代史出发，按年份阅读 1949—2009 年中华人民共和国大事记。' : info?.description || '浏览中国历史学习网的历史文章。';
+  const canonical = absoluteUrl(categoryHref(name));
+  return {
+    title: name,
+    description,
+    alternates: { canonical },
+    openGraph: openGraph(`${name}｜中国历史学习网`, description, canonical),
+    twitter: twitterCard(`${name}｜中国历史学习网`, description),
+    robots: requestedName === name ? undefined : { index: false, follow: true },
+  };
+}
 export default async function Category({ params }: { params: Promise<{ category: string }> }) {
   const requestedName = decodeURIComponent((await params).category);
   const name = displayCategory(requestedName);

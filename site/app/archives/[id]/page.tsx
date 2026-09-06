@@ -1,22 +1,96 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronRight, Clock3, Minus, Plus } from 'lucide-react';
-import { articles, articleHref, categoryHref, basePath, shortTitle, periods, displayCategory, articlesForCategory } from '@/lib/content';
+import { articles, articleHref, categoryHref, basePath, shortTitle, periods, displayCategory, articlesForCategory, absoluteUrl } from '@/lib/content';
 import { formatChronicle } from '@/lib/chronicles.mjs';
-export function generateStaticParams() { return articles.map(a => ({ id: a.id })); }
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const resolved = await params; const article = articles.find(a => a.id === resolved.id);
-  return { title: article?.title || '文章未找到', description: article?.excerpt };
+import { openGraph, serializeJsonLd, twitterCard } from '@/lib/seo';
+
+export function generateStaticParams() {
+  return articles.map(article => ({ id: article.id }));
 }
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const article = articles.find(item => item.id === id);
+  if (!article) return { title: '文章未找到', robots: { index: false, follow: true } };
+  const canonical = absoluteUrl(articleHref(article.id));
+  const description = `${article.title}：${article.excerpt}`;
+  return {
+    title: article.title,
+    description,
+    alternates: { canonical },
+    openGraph: openGraph(article.title, description, canonical, 'article'),
+    twitter: twitterCard(article.title, description),
+  };
+}
+
 export default async function Article({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params; const a = articles.find(a => a.id === id); if (!a) notFound();
-  const group = articlesForCategory(a.category); const index = group.indexOf(a); const previous = group[index - 1]; const next = group[index + 1];
-  const homeCategory = a.category === '中国历史';
-  const formatted = formatChronicle(a);
-  const contentHtml = id === '196' ? formatted.html.replace(/<a\b[^>]*>(\d{4})<\/a>/g, (link, year) => {
-    const entry = articles.find(item => item.title === `中华人民共和国大事记（${year}年）`);
-    return entry ? `<a href="${articleHref(entry.id)}">${year}</a>` : link;
-  }) : formatted.html;
+  const { id } = await params;
+  const article = articles.find(item => item.id === id);
+  if (!article) notFound();
+
+  const group = articlesForCategory(article.category);
+  const index = group.indexOf(article);
+  const previous = group[index - 1];
+  const next = group[index + 1];
+  const homeCategory = article.category === '中国历史';
+  const formatted = formatChronicle(article);
+  // The retired chronicle overview is now represented by the combined category page.
+  const contentHtml = formatted.html.replace(/href="\/archives\/196\/?"/g, `href="${categoryHref('大事记')}"`);
   const body = basePath ? contentHtml.replaceAll('href="/archives/', `href="${basePath}/archives/`) : contentHtml;
-  return <main id="main" className="shell inner-page reader-page"><div className="reading-progress" aria-hidden="true"><div id="reading-progress-bar"/></div><div className="breadcrumbs"><Link href="/">首页</Link><ChevronRight size={13}/>{homeCategory ? <span>中国历史</span> : <><Link href={categoryHref(a.category)}>{displayCategory(a.category)}</Link><ChevronRight size={13}/><span>正文</span></>}</div><div className="reader-layout"><aside className="reader-sidebar"><Link className="back-link" href={homeCategory ? '/' : categoryHref(a.category)}><ArrowLeft size={15}/> {homeCategory ? '返回首页' : `${displayCategory(a.category)}目录`}</Link><span className="eyebrow">IN THIS VOLUME</span><nav aria-label="本卷文章">{group.length <= 13 ? group.map(item => <Link aria-current={item.id === id ? 'page' : undefined} href={articleHref(item.id)} key={item.id}>{shortTitle(item.title)}</Link>) : <><Link href={articleHref('214')} aria-current={id === '214' ? 'page' : undefined}>开篇 · 中国现代史</Link><Link href={articleHref('196')} aria-current={id === '196' ? 'page' : undefined}>大事记总览</Link>{[previous, a, next].filter(item => item && !['214', '196'].includes(item.id)).map(item => <Link aria-current={item.id === id ? 'page' : undefined} href={articleHref(item.id)} key={item.id}>{item.title.replace('中华人民共和国大事记', '')}</Link>)}<Link href={categoryHref('大事记')}>查看全部年份 <ArrowRight size={13}/></Link></>}</nav><div className="reader-side-note">放慢一点，<br/>与历史好好相处。</div></aside><article className="reading-article"><header className="article-heading"><span className="eyebrow">{displayCategory(a.category)} {periods[a.id] ? ` / ${periods[a.id]}` : ''}</span><h1>{a.title}</h1><div className="article-meta"><span><Clock3 size={14}/> 约 {a.minutes} 分钟阅读</span><div className="font-controls" aria-label="阅读字号"><button type="button" data-font="smaller" aria-label="缩小正文字号"><Minus size={13}/></button><span>字</span><button type="button" data-font="larger" aria-label="放大正文字号"><Plus size={13}/></button></div></div></header>{/* Frozen archive context: retained for future use, hidden from the reading UI. */}<div className="archive-notice" hidden>存档原文<span>本篇保留原站措辞与历史数据；资料中的时间表述及部分结论反映原文写作时点。</span></div>{formatted.headings.length > 0 && <details className="article-toc"><summary>本篇目录 <span>{formatted.headings.length} 个章节</span></summary><nav aria-label="本篇目录">{formatted.headings.map(h => <a key={h.id} href={`#${h.id}`}>{h.title}</a>)}</nav></details>}<div className="prose" id="article-body" dangerouslySetInnerHTML={{ __html: body }}/>{/* Frozen source panel; provenance remains in the corpus and this hidden block. */}<div className="article-source" id="source" hidden><span className="eyebrow">资料出处</span><p>资料来源：{a.source}。{a.archiveUrl ? '正文从 2021 年 4 月 19 日首页快照恢复，' : ''}版权归原作者所有。</p>{a.archiveUrl && <a href={a.archiveUrl} target="_blank" rel="noreferrer">查看 Internet Archive 存档 <ArrowUpRight size={14}/></a>}</div><nav className="article-pagination" aria-label="相邻文章">{previous ? <Link href={articleHref(previous.id)}><span><ArrowLeft size={14}/> 上一篇</span><strong>{shortTitle(previous.title)}</strong></Link> : <Link href="/"><span><ArrowLeft size={14}/> 返回</span><strong>中国历史学习网首页</strong></Link>}{next && <Link href={articleHref(next.id)}><span>下一篇 <ArrowRight size={14}/></span><strong>{shortTitle(next.title)}</strong></Link>}</nav></article></div><a className="back-top" href="#main">回到顶部 ↑</a></main>;
+  const canonical = absoluteUrl(articleHref(article.id));
+  const description = `${article.title}：${article.excerpt}`;
+  const articleStructuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        headline: article.title,
+        description,
+        url: canonical,
+        mainEntityOfPage: canonical,
+        inLanguage: 'zh-CN',
+        isPartOf: { '@id': absoluteUrl('/#website') },
+        author: { '@id': absoluteUrl('/#organization') },
+        publisher: { '@id': absoluteUrl('/#organization') },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: '首页', item: absoluteUrl('/') },
+          { '@type': 'ListItem', position: 2, name: displayCategory(article.category), item: absoluteUrl(categoryHref(article.category)) },
+          { '@type': 'ListItem', position: 3, name: article.title, item: canonical },
+        ],
+      },
+    ],
+  };
+
+  return <main id="main" className="shell inner-page reader-page">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleStructuredData) }}/>
+    <div className="reading-progress" aria-hidden="true"><div id="reading-progress-bar"/></div>
+    <div className="breadcrumbs"><Link href="/">首页</Link><ChevronRight size={13}/>{homeCategory ? <span>中国历史</span> : <><Link href={categoryHref(article.category)}>{displayCategory(article.category)}</Link><ChevronRight size={13}/><span>正文</span></>}</div>
+    <div className="reader-layout">
+      <aside className="reader-sidebar">
+        <Link className="back-link" href={homeCategory ? '/' : categoryHref(article.category)}><ArrowLeft size={15}/> {homeCategory ? '返回首页' : `${displayCategory(article.category)}目录`}</Link>
+        <span className="eyebrow">IN THIS VOLUME</span>
+        <nav aria-label="本卷文章">{group.length <= 13 ? group.map(item => <Link aria-current={item.id === id ? 'page' : undefined} href={articleHref(item.id)} key={item.id}>{shortTitle(item.title)}</Link>) : <>
+          <Link href={articleHref('214')} aria-current={id === '214' ? 'page' : undefined}>开篇 · 中国现代史</Link>
+          {[previous, article, next].filter(item => item && item.id !== '214').map(item => <Link aria-current={item.id === id ? 'page' : undefined} href={articleHref(item.id)} key={item.id}>{item.title.replace('中华人民共和国大事记', '')}</Link>)}
+          <Link href={categoryHref('大事记')}>查看全部年份 <ArrowRight size={13}/></Link>
+        </>}</nav>
+        <div className="reader-side-note">放慢一点，<br/>与历史好好相处。</div>
+      </aside>
+      <article className="reading-article">
+        <header className="article-heading"><span className="eyebrow">{displayCategory(article.category)} {periods[article.id] ? ` / ${periods[article.id]}` : ''}</span><h1>{article.title}</h1><div className="article-meta"><span><Clock3 size={14}/> 约 {article.minutes} 分钟阅读</span><div className="font-controls" aria-label="阅读字号"><button type="button" data-font="smaller" aria-label="缩小正文字号"><Minus size={13}/></button><span>字</span><button type="button" data-font="larger" aria-label="放大正文字号"><Plus size={13}/></button></div></div></header>
+        {/* Frozen archive context: retained for future use, hidden from the reading UI. */}
+        <div className="archive-notice" hidden>存档原文<span>本篇保留原站措辞与历史数据；资料中的时间表述及部分结论反映原文写作时点。</span></div>
+        {formatted.headings.length > 0 && <details className="article-toc"><summary>本篇目录 <span>{formatted.headings.length} 个章节</span></summary><nav aria-label="本篇目录">{formatted.headings.map(heading => <a key={heading.id} href={`#${heading.id}`}>{heading.title}</a>)}</nav></details>}
+        <div className="prose" id="article-body" dangerouslySetInnerHTML={{ __html: body }}/>
+        {/* Frozen source panel; provenance remains in the corpus and this hidden block. */}
+        <div className="article-source" id="source" hidden><span className="eyebrow">资料出处</span><p>资料来源：{article.source}。{article.archiveUrl ? '正文从 2021 年 4 月 19 日首页快照恢复，' : ''}版权归原作者所有。</p>{article.archiveUrl && <a href={article.archiveUrl} target="_blank" rel="noreferrer">查看 Internet Archive 存档 <ArrowUpRight size={14}/></a>}</div>
+        <nav className="article-pagination" aria-label="相邻文章">{previous ? <Link href={articleHref(previous.id)}><span><ArrowLeft size={14}/> 上一篇</span><strong>{shortTitle(previous.title)}</strong></Link> : <Link href="/"><span><ArrowLeft size={14}/> 返回</span><strong>中国历史学习网首页</strong></Link>}{next && <Link href={articleHref(next.id)}><span>下一篇 <ArrowRight size={14}/></span><strong>{shortTitle(next.title)}</strong></Link>}</nav>
+      </article>
+    </div>
+    <a className="back-top" href="#main">回到顶部 ↑</a>
+  </main>;
 }
