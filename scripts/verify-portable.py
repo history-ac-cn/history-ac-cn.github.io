@@ -52,6 +52,7 @@ for p,parser in parsed.items():
 recovered=json.loads((ROOT/'site/content/articles.json').read_text())
 assert len(recovered)==83
 articles=[a for a in recovered+json.loads((ROOT/'site/content/additions.json').read_text()) if a['id']!='196']
+standard_chronicle_source='来源：中华人民共和国大事记（1949年10月—2009年9月）'
 def unwrap_source(line):
     pairs={'（':'）','(':')'}
     return line[1:-1].strip() if line and pairs.get(line[0])==line[-1] else line
@@ -69,13 +70,17 @@ for a in articles:
         expected_lines=[line.strip() for line in re.split(r'\n+',a['text']) if line.strip()]
         sources=[unwrap_source(line) for line in expected_lines if re.match(r'^[（(]?来源[：:]',line)]
         events=[line for line in expected_lines if not re.match(r'^[（(]?来源[：:]',line)]
+        is_annual=bool(re.search(r'（\d{4}年）',a['title']))
+        if is_annual: sources=[standard_chronicle_source]
         expected='\n'.join(sources+events)
         if re.sub(r'\s+','', ''.join(content.text)) != re.sub(r'\s+','',expected): errors.append(f'Altered or truncated content {a["id"]}')
-        if re.search(r'（\d{4}年）',a['title']) and sources:
+        if is_annual and sources:
             source_position=markup.find('class="chronicle-source"')
             event_position=markup.find('class="chronicle-event"')
             if source_position < 0 or event_position < 0 or source_position > event_position:
                 errors.append(f'Source is not first in chronicle {a["id"]}')
+            if standard_chronicle_source not in ''.join(content.text):
+                errors.append(f'Chronicle source was not standardized {a["id"]}')
 font_css=(SITE/'assets/fonts/embedded.css').read_text()
 assert font_css.count('data:font/woff2;base64,')==2
 assert 'https://' not in font_css
@@ -87,7 +92,8 @@ for tag,key,url,_ in root_parser.references:
         dest=ROOT / unquote(parts.path)
         if dest.is_dir(): dest=dest/'index.html'
         assert dest.is_file(), 'Root entry broken: ' + url
-assert (SITE/'assets/search-index.js').is_file()
+search_index=(SITE/'assets/search-index.js').read_text()
+assert search_index.count(standard_chronicle_source)==61, 'All 61 annual chronicles must use the standardized source in search'
 modern=(SITE/'archives/category/现代史·大事记/index.html').read_text()
 assert 'chronicle-opening' in modern and 'chronicle-intro' in modern
 assert modern.count('分钟阅读')==61, 'All 61 years from 1949 to 2009 must be present'
@@ -95,9 +101,9 @@ assert 'data-file-href="../../71/index.html"' in modern, 'Chronicle category mus
 assert (SITE/'archives/71/index.html').is_file(), 'Article 71 must publish the 2007 chronicle'
 assert not (SITE/'archives/2007').exists(), 'The former 2007 route must fall through to 404'
 assert not (SITE/'archives/196').exists(), 'Retired chronicle overview must not be published'
-assert '"id":"196"' not in (SITE/'assets/search-index.js').read_text(), 'Retired chronicle overview must not be searchable'
-assert '"id":"71"' in (SITE/'assets/search-index.js').read_text(), 'The 2007 chronicle must be searchable as article 71'
-assert '"id":"2007"' not in (SITE/'assets/search-index.js').read_text(), 'The former 2007 article ID must not be searchable'
+assert '"id":"196"' not in search_index, 'Retired chronicle overview must not be searchable'
+assert '"id":"71"' in search_index, 'The 2007 chronicle must be searchable as article 71'
+assert '"id":"2007"' not in search_index, 'The former 2007 article ID must not be searchable'
 assert 'data-retired-article-href=' in (SITE/'404.html').read_text(), 'Legacy article redirect must be available from the 404 page'
 assert '存档暂缺' not in modern and '2007 年暂缺' not in modern
 assert '以下按原站内容整理' not in modern

@@ -2,6 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { chronicleTextForDisplay } from '../site/lib/chronicles.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const exported = path.join(root, 'site/dist/client');
 const output = path.join(root, 'preview');
@@ -47,7 +48,10 @@ await write('CNAME', await fs.readFile(path.join(root, 'CNAME')));
 for (const file of (await walk(exported)).filter(file => file.endsWith('.css') && file.includes('/_next/'))) {
   await write(path.relative(exported, file), await fs.readFile(file));
 }
-const index = articles.map(({ id, title, text, excerpt, category }) => ({ id, title, text, excerpt, category: ['现代史', '大事记'].includes(category) ? '现代史·大事记' : category }));
+const index = articles.map(article => {
+  const { id, title, excerpt, category } = article;
+  return { id, title, text: chronicleTextForDisplay(article), excerpt, category: ['现代史', '大事记'].includes(category) ? '现代史·大事记' : category };
+});
 const searchScript = 'window.HISTORY_SEARCH = ' + JSON.stringify(index).replaceAll('<', '\\u003c') + ';\n';
 await write('assets/search-index.js', searchScript);
 for (const file of htmlFiles) {

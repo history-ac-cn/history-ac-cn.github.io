@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
-import { formatChronicle } from '../site/lib/chronicles.mjs';
+import { formatChronicle, standardChronicleSource } from '../site/lib/chronicles.mjs';
 const script = fs.readFileSync(new URL('../site/public/assets/navigation.js', import.meta.url), 'utf8');
 function run(href, { notFound, redirectHref, retiredArticleHref, baseURI } = {}) {
   const url = new URL(href), changes = {};
@@ -27,11 +27,12 @@ assert.equal(run('https://example.github.io/history/archives/196/?q=a#years', { 
 const additions=JSON.parse(fs.readFileSync(new URL('../site/content/additions.json', import.meta.url),'utf8'));
 const result=formatChronicle(additions[0]);
 assert.equal(result.headings.length, 0);
-assert.deepEqual([...result.html.matchAll(/data-month="([^"]+)"/g)].map(m=>m[1]), ['3 月','4 月','6 月','7 月','7 月','7 月','8 月','9 月','10 月','10 月','10 月']);
-assert.equal((result.html.match(/class="chronicle-event"/g)||[]).length,11);
+assert(result.html.startsWith(`<p class="chronicle-source">${standardChronicleSource}</p>`));
+assert.deepEqual([...result.html.matchAll(/data-month="([^"]+)"/g)].map(m=>m[1]), ['3 月','3 月','5 月','6 月','6 月','6 月','6 月','6 月','7 月','8 月','8 月','8 月','10 月','10 月','本年底']);
+assert.equal((result.html.match(/class="chronicle-event"/g)||[]).length,15);
 assert(!result.html.includes('<h2'));
-assert.match(result.html, /data-month="7 月">7月1日[^<]*<\/p>\n<p[^>]*data-month="7 月">7月10日[^<]*<\/p>\n<p[^>]*data-month="7 月">7月11日[^<]*<\/p>/);
-assert(result.html.includes('2019年1月3日，实现世界首次月球背面软着陆'));
+assert.match(result.html, /data-month="6 月">６月３日[^<]*<\/p>\n<p[^>]*data-month="6 月">６月７日[^<]*<\/p>/);
+assert(result.html.includes('本年底　“五纵七横”国道主干线基本贯通'));
 const example = { title:'中华人民共和国大事记（1955年）', html:'', headings:[], text:'来源：资料\n８月３１日　甲。\n同日　乙。\n９月　丙。\n同月　丁。\n年底　戊。' };
 const grouped=formatChronicle(example);
 assert.deepEqual([...grouped.html.matchAll(/data-month="([^"]+)"/g)].map(m=>m[1]), ['8 月','8 月','9 月','9 月','年底']);
@@ -43,6 +44,7 @@ assert(sourceFirst.startsWith('<p class="chronicle-source">来源：原始资料
 assert(sourceFirst.indexOf('chronicle-source') < sourceFirst.indexOf('chronicle-event'));
 const recovered=JSON.parse(fs.readFileSync(new URL('../site/content/articles.json', import.meta.url),'utf8'));
 const article192=formatChronicle(recovered.find(article => article.id === '192')).html;
+assert(article192.startsWith(`<p class="chronicle-source">${standardChronicleSource}</p>`));
 assert.equal((article192.match(/class="chronicle-event"/g)||[]).length,20);
 assert.match(article192, /１１月２４日[^<]*１９５１年６月１１日[^<]*<\/p>/);
 console.log('PASS: clean HTTP URLs, nested /index 404 redirects, query/hash preservation, file navigation, legacy redirects, one-event paragraphs, source placement and source punctuation.');
