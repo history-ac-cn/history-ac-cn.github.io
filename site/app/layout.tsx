@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   creator: siteName,
   publisher: siteName,
   keywords: ['中国历史', '中国史', '古代史', '近代史', '现代史', '中华人民共和国大事记', '历史学习'],
-  icons: { icon: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/logo.png` },
+  icons: { icon: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/favicon.png` },
   openGraph: openGraph('中国历史学习网｜半小时搞定千年中国史', siteDescription, absoluteUrl('/')),
   twitter: twitterCard('中国历史学习网｜半小时搞定千年中国史', siteDescription),
 };
@@ -57,5 +57,5 @@ const structuredData = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="zh-CN" suppressHydrationWarning><head><script src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/theme.js`}/><link rel="stylesheet" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/fonts/embedded.css`}/><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}/></head><body><a className="skip-link" href="#main">跳至正文</a><SiteHeader/>{children}<SiteFooter/><script src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/search-index.js`} defer/><script src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/site.js`} defer/></body></html>;
+  return <html lang="zh-CN" suppressHydrationWarning><head><link id="site-fonts" rel="stylesheet" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/fonts/fonts.css`} data-file-href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/fonts/embedded.css`}/><script src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/theme.js`}/><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(structuredData) }}/></head><body><a className="skip-link" href="#main">跳至正文</a><SiteHeader/>{children}<SiteFooter/><script src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/assets/site.js`} defer/></body></html>;
 }

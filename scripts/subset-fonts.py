@@ -30,3 +30,5 @@ for source, family, filename in zip(sys.argv[1:], ['History Serif', 'History San
     print(f'{family}: {len(data):,} bytes, {len(font.getBestCmap())} characters')
 (out / 'embedded.css').write_text('\n'.join(css))
 (out / 'manifest.json').write_text(json.dumps(info, ensure_ascii=False, indent=2) + '\n')
+from runpy import run_path
+run_path(str(ROOT / 'scripts/optimize-fonts.py'), run_name='__main__')

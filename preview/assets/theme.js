@@ -1,5 +1,11 @@
 /* Apply the saved theme before paint; system mode remains the default. */
 (() => {
+  // Keep embedded data fonts for browsers that restrict WOFF2 files over file://.
+  // Online readers use small CSS plus independently cached font subsets.
+  const fontStyles = document.getElementById('site-fonts');
+  if (location.protocol === 'file:' && fontStyles?.dataset.fileHref) {
+    fontStyles.href = fontStyles.dataset.fileHref;
+  }
   const storageKey = 'history-site-theme';
   const choices = new Set(['system', 'light', 'dark']);
   const media = window.matchMedia?.('(prefers-color-scheme: dark)');

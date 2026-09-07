@@ -64,6 +64,9 @@ for (const file of htmlFiles) {
   html = html.replace(/<script\b(?![^>]*\btype=["']application\/ld\+json["'])[^>]*>[\s\S]*?<\/script>/gi, '');
   html = html.replace(/<link\b(?=[^>]*\brel="(?:modulepreload|preload|prefetch)")[^>]*>/gi, '');
   html = html.replace(/\sdata-(?:rsc-css-href|precedence)="[^"]*"/g, '');
+  // The homepage only needs common glyphs. Reading pages keep each font in one
+  // file so CJK shaping across subset boundaries cannot change prose line breaks.
+  if (relative === 'index.html') html = html.replace('/assets/fonts/fonts.css', '/assets/fonts/fonts-home.css');
   html = html.replace(/<html\b/, '<html data-portable="true"');
   html = html.replace(/\b(href|src)="([^"]+)"/g, (_, attr, url) => {
     const local = toRelative(url, relative);

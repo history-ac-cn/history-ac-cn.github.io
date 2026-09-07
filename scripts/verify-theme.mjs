@@ -29,7 +29,7 @@ assert(contrast(darkForeground, darkBackground) >= 7, 'Dark-mode body text must 
 assert(contrast(darkAccent, darkBackground) >= 4.5, 'Dark-mode links must meet text contrast.');
 assert(contrast(darkButtonText, darkAccent) >= 4.5, 'Dark-mode button labels must meet text contrast.');
 
-function executeTheme({ saved = null, systemDark = false } = {}) {
+function executeTheme({ saved = null, systemDark = false, protocol = 'https:' } = {}) {
   const storage = new Map(saved ? [['history-site-theme', saved]] : []);
   const listeners = {};
   const mediaListeners = {};
@@ -39,12 +39,13 @@ function executeTheme({ saved = null, systemDark = false } = {}) {
     setAttribute(name, value) { this.attributes[name] = value; },
   }));
   const status = { textContent: '' };
+  const fontStyles = { href: 'assets/fonts/fonts.css', dataset: { fileHref: 'assets/fonts/embedded.css' } };
   const media = { matches: systemDark, addEventListener(type, callback) { mediaListeners[type] = callback; } };
   const document = {
     readyState: 'complete',
     documentElement: { dataset: {} },
     querySelectorAll(selector) { return selector === '[data-theme-choice]' ? controls : []; },
-    getElementById(id) { return id === 'theme-status' ? status : null; },
+    getElementById(id) { return id === 'theme-status' ? status : id === 'site-fonts' ? fontStyles : null; },
     addEventListener(type, callback) { listeners[type] = callback; },
   };
   const localStorage = {
@@ -53,11 +54,13 @@ function executeTheme({ saved = null, systemDark = false } = {}) {
     removeItem(key) { storage.delete(key); },
   };
   const window = { matchMedia() { return media; } };
-  vm.runInNewContext(themeScript, { window, document, localStorage, Set });
-  return { window, document, storage, listeners, media, mediaListeners, controls, status };
+  vm.runInNewContext(themeScript, { window, document, localStorage, Set, location: { protocol } });
+  return { window, document, storage, listeners, media, mediaListeners, controls, status, fontStyles };
 }
 
 const automatic = executeTheme({ systemDark: true });
+assert.equal(automatic.fontStyles.href, 'assets/fonts/fonts.css', 'Online readers should load external font subsets.');
+assert.equal(executeTheme({ protocol: 'file:' }).fontStyles.href, 'assets/fonts/embedded.css', 'Local readers must retain embedded fonts.');
 assert.equal(automatic.window.HistoryTheme.preference, 'system');
 assert.equal(automatic.window.HistoryTheme.effective, 'dark');
 assert.equal(automatic.document.documentElement.dataset.theme, undefined);
