@@ -1,0 +1,14 @@
+{
+  "source": "recovery/logo-before-continent-removal-2026-09-07/logo.png",
+  "output": "site/public/assets/logo.png",
+  "source_sha256": "f9c4c2c47144750884787dc7bcf23d518aa6b4cd3b8d03aff3510b3a1ea29cdd",
+  "output_sha256": "aedbf0c3214c81e1e4c83330359496c5e7cec47519265446ae9902827a760a94",
+  "size": [
+    1254,
+    1254
+  ],
+  "cleared_pixels": 171094,
+  "retained_pixels": 499867,
+  "rgb_unchanged": true,
+  "retained_rgba_unchanged": true
+}
