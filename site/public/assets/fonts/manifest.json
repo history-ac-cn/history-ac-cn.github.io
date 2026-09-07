@@ -2,17 +2,17 @@
   {
     "family": "History Serif",
     "file": "history-serif.woff2",
-    "glyphs": 1880,
-    "bytes": 682268,
+    "glyphs": 2078,
+    "bytes": 754384,
     "source_sha256": "050080d9255a86808f2945bffac582b31ef32bc36411ce29563b4961670c66f9",
-    "sha256": "66c93bd97e896c3c3ea703169931380cc0069e52b3a95377ec43d19db67cf7d8"
+    "sha256": "5dd9e66f43cc1ab7e6fd65e72873e25bfb6d423ed46e372636c75009402e31e7"
   },
   {
     "family": "History Sans",
     "file": "history-sans.woff2",
-    "glyphs": 1880,
-    "bytes": 523160,
+    "glyphs": 2078,
+    "bytes": 578632,
     "source_sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
-    "sha256": "9a5e2b06d470a23facb376527359748e6348f1a0c85dbdf06b42a6a33c1271eb"
+    "sha256": "f6be5a3dd002d991dae10ff9f712e1920ec44b8d2e47757f1ab0450b53de8fca"
   }
 ]

@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   const requestedName = decodeURIComponent((await params).category);
   const name = displayCategory(requestedName);
   const info = categories.find(category => category.name === name);
-  const description = name === modernCategory ? '从中国现代史出发，按年份阅读 1949—2009 年中华人民共和国大事记。' : info?.description || '浏览中国历史学习网的历史文章。';
+  const description = name === modernCategory ? '从中国现代史出发，按年份阅读 1949—2019 年中华人民共和国大事记。' : info?.description || '浏览中国历史学习网的历史文章。';
   const canonical = absoluteUrl(categoryHref(name));
   return {
     title: name,

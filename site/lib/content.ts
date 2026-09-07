@@ -1,9 +1,30 @@
 import recoveredArticles from '@/content/articles.json';
 import additions from '@/content/additions.json';
+import editions from '@/content/chronicles-2019.json';
+import { searchableArticles, chronicleYear, primaryArticles, chronicleHref, editionHref } from './chronicle-editions.mjs';
 export const recoveredArticleCount = recoveredArticles.length;
 // Keep the recovered corpus intact; subsequent editorial additions live separately.
 export const excludedArticleIds = new Set(['196']);
-export const articles = [...recoveredArticles, ...additions].filter(article => !excludedArticleIds.has(article.id));
+export type Article = typeof recoveredArticles[number] & { edition?: string; primaryEdition?: string; year?: number };
+const originals = [...recoveredArticles, ...additions].filter(article => !excludedArticleIds.has(article.id));
+export const articles: Article[] = primaryArticles(originals, editions);
+export const chronicles2019 = editions;
+export const comparableChronicles = editions.filter(article => article.primaryEdition !== '2019');
+export const annualChronicles = articles.filter(chronicleYear).sort((a, b) => chronicleYear(a)! - chronicleYear(b)!);
+export const searchArticles: Article[] = searchableArticles(originals, chronicles2019);
+export const chronicleViewHref = (id: string, view: '2009' | '2019' | 'compare' = '2009') => {
+  const newer = chronicles2019.find(article => article.id === id);
+  return view === '2019' && newer ? editionHref(newer) : chronicleHref(id, view);
+};
+// Version controls and comparison availability follow the content registry.
+// A future second edition can reuse /a/ and /compare/ for newer-only years.
+export const chronicleVersionsFor = (id: string) => {
+  const primary = articles.find(article => article.id === id);
+  if (!primary || !chronicleYear(primary)) return [];
+  const views: Array<'2009' | '2019'> = [primary.edition === '2019' ? '2019' : '2009'];
+  if (comparableChronicles.some(article => article.id === id)) views.push('2019');
+  return views;
+};
 export const modernCategory = '现代史·大事记';
 export const displayCategory = (name: string) => ['现代史', '大事记', modernCategory].includes(name) ? modernCategory : name;
 export const articlesForCategory = (name: string) => articles.filter(a => displayCategory(a.category) === displayCategory(name)).sort((a, b) => {

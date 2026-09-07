@@ -2,23 +2,27 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { primaryArticles, chronicleHref } from '../site/lib/chronicle-editions.mjs';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const output = path.join(root, 'preview');
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.history.ac.cn').replace(/\/$/, '');
-const articles = (
+const originals = (
   await Promise.all(
     ['articles', 'additions'].map(async name =>
       JSON.parse(await fs.readFile(path.join(root, `site/content/${name}.json`), 'utf8')),
     ),
   )
 ).flat().filter(article => article.id !== '196');
+const editions = JSON.parse(await fs.readFile(path.join(root, 'site/content/chronicles-2019.json'), 'utf8'));
+const articles = primaryArticles(originals, editions);
 const categories = ['古代史', '近代史', '现代史·大事记'];
 const canonicalRoutes = [
   '/',
   '/about/',
   ...categories.map(category => `/archives/category/${category}/`),
   ...articles.map(article => `/archives/${article.id}/`),
+  ...editions.filter(article => article.primaryEdition !== '2019').flatMap(article => [chronicleHref(article.id, '2019'), chronicleHref(article.id, 'compare')]),
 ];
 const pageFile = route => route === '/'
   ? path.join(output, 'index.html')
@@ -44,8 +48,8 @@ const schemaTypes = value => {
 const errors = [];
 const check = (condition, message) => { if (!condition) errors.push(message); };
 
-check(articles.length === 83, `Expected 83 published articles; found ${articles.length}.`);
-check(canonicalRoutes.length === 88, `Expected 88 canonical routes; found ${canonicalRoutes.length}.`);
+check(articles.length === 93, `Expected 93 primary articles; found ${articles.length}.`);
+check(canonicalRoutes.length === 220, `Expected 220 canonical routes; found ${canonicalRoutes.length}.`);
 
 for (const route of canonicalRoutes) {
   const file = pageFile(route);
@@ -80,7 +84,7 @@ for (const article of articles) {
   let types = [];
   try { types = jsonLd(html).flatMap(schemaTypes); }
   catch (error) { errors.push(`${route}: invalid article JSON-LD (${error.message}).`); }
-  check(description.startsWith(`${article.title}：`), `${route}: description lacks article context.`);
+  check(description.startsWith(`${article.title}${article.edition === '2019' ? ' · 2019 年版' : ''}：`), `${route}: description lacks article context.`);
   check(meta(html, 'property', 'og:type') === 'article', `${route}: og:type must be article.`);
   check(types.includes('Article'), `${route}: missing Article schema.`);
   check(types.includes('BreadcrumbList'), `${route}: missing BreadcrumbList schema.`);
@@ -119,5 +123,5 @@ if (errors.length) {
   console.error(errors.join('\n'));
   process.exitCode = 1;
 } else {
-  console.log(`PASS: SEO metadata and structured data verified across ${canonicalRoutes.length} canonical URLs; sitemap and robots cover ${articles.length} articles.`);
+  console.log(`PASS: SEO metadata and structured data verified across ${canonicalRoutes.length} canonical URLs, including both chronicle editions and comparison pages.`);
 }

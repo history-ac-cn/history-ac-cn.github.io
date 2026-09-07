@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { primaryArticles, chronicleHref } from '../site/lib/chronicle-editions.mjs';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const publicDir = path.join(root, 'site/public');
@@ -14,15 +15,18 @@ const articleGroups = await Promise.all(
     JSON.parse(await fs.readFile(path.join(root, `site/content/${name}.json`), 'utf8')),
   ),
 );
-const articles = articleGroups
+const originals = articleGroups
   .flat()
   .filter(article => !excludedArticleIds.has(article.id));
+const editions = JSON.parse(await fs.readFile(path.join(root, 'site/content/chronicles-2019.json'), 'utf8'));
+const articles = primaryArticles(originals, editions);
 const categories = ['古代史', '近代史', '现代史·大事记'];
 const routes = [
   '/',
   '/about/',
   ...categories.map(category => `/archives/category/${category}/`),
   ...articles.map(article => `/archives/${article.id}/`),
+  ...editions.filter(article => article.primaryEdition !== '2019').flatMap(article => [chronicleHref(article.id, '2019'), chronicleHref(article.id, 'compare')]),
 ];
 const absolute = route => new URL(route.replace(/^\//, ''), `${siteUrl}/`).href;
 const escapeXml = value => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&apos;');

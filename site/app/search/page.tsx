@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Search, ArrowUpRight } from 'lucide-react';
-import { articles, articleHref, displayCategory, absoluteUrl } from '@/lib/content';
+import { searchArticles as articles, articleHref, displayCategory, absoluteUrl } from '@/lib/content';
 import { openGraph, twitterCard } from '@/lib/seo';
 const description = '搜索中国历史学习网的文章标题与正文。';
 export const metadata: Metadata = {

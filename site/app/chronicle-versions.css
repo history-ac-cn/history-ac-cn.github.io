@@ -1,0 +1,33 @@
+.chronicle-versions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:18px 0 0;margin-bottom:25px;font-size:13px;color:var(--theme-text-secondary)}
+.version-label{margin-right:8px;font-size:12px;color:var(--theme-text-tertiary)}
+.chronicle-versions a{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:8px 13px;border:1px solid transparent;border-radius:3px;white-space:nowrap}
+.chronicle-versions a:hover{color:var(--blue);background:var(--theme-hover)}
+.chronicle-versions a[aria-current=page]{color:var(--blue);border-color:var(--theme-panel-border);background:var(--theme-soft)}
+.compare-heading h1{font-family:var(--serif);font-size:52px;letter-spacing:0;display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.compare-heading h1>span{font-size:29px;font-weight:500}
+.compare-heading>p{margin-bottom:0}
+.compare-toolbar{display:flex;align-items:center;gap:20px;border-block:1px solid var(--line);padding:8px 0}
+.compare-toolbar .chronicle-versions{margin:0;padding:0}
+.compare-toolbar .font-controls{flex-shrink:0}
+.compare-months{display:flex;flex-wrap:wrap;gap:5px 9px;padding:20px 0;font-size:12px;color:var(--theme-text-secondary)}
+.compare-months a{padding:5px 10px;border-radius:3px;background:var(--theme-section)}
+.compare-months a:hover{color:var(--blue);background:var(--theme-hover)}
+.comparison-scroll{border:1px solid var(--line);overflow-x:auto;border-radius:3px;scrollbar-width:thin}
+.comparison-scroll:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+.comparison-grid{font-size:18px;min-width:700px}
+.comparison-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.comparison-column-heading{padding:26px 30px;background:var(--theme-soft)}
+.comparison-column-heading+header,.comparison-cell+.comparison-cell{border-left:1px solid var(--line)}
+.comparison-column-heading>a{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--serif);font-size:24px;color:var(--blue)}
+.comparison-column-heading>p{font-family:var(--serif);font-size:inherit;line-height:1.85;color:var(--theme-text-tertiary);margin:12px 0 0;overflow-wrap:anywhere}
+.comparison-period{scroll-margin-top:22px}
+.comparison-period>h2{margin:0;padding:11px 30px;border-block:1px solid var(--line);font-size:14px;font-weight:500;letter-spacing:1px;color:var(--theme-text-soft-blue);background:var(--theme-section)}
+.comparison-cell.prose{font-size:inherit;min-width:0;padding:26px 30px 8px;line-height:2.15}
+.comparison-cell.prose>p:first-child:has(+p){margin-top:0}
+.comparison-cell .chronicle-event{scroll-margin-top:24px}
+.comparison-cell .comparison-empty{font-family:'History Sans',sans-serif;font-size:13px;color:var(--theme-text-tertiary);margin-bottom:24px}
+.compare-mobile-hint{display:none}
+@media(max-width:800px){.compare-heading h1{font-size:44px;gap:12px}.compare-heading h1>span{font-size:25px}.comparison-cell.prose,.comparison-column-heading{padding:22px}.comparison-period>h2{padding-inline:22px}}
+@media(max-width:760px){.compare-mobile-hint{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--theme-text-secondary);margin:0 0 13px}.comparison-grid{font-size:17px}.compare-months{gap:5px;padding-block:16px}.compare-toolbar{gap:12px;flex-wrap:wrap}.compare-heading h1{gap:8px 12px}.compare-heading h1>span{font-size:22px}}
+@media(max-width:540px){.chronicle-versions{gap:3px;font-size:12px}.chronicle-versions a{padding:8px 10px}.version-label{margin-right:4px}.compare-heading h1{font-size:36px}.compare-heading h1>span{font-size:20px}.compare-toolbar .version-label{display:none}.compare-toolbar .font-controls{gap:5px}.compare-toolbar .chronicle-versions a{padding-inline:8px}}
+@media print{.chronicle-versions,.compare-toolbar,.compare-months,.compare-mobile-hint{display:none!important}.comparison-scroll{overflow:visible;border:0}.comparison-grid{min-width:0;font-size:10pt}.comparison-cell.prose,.comparison-column-heading{padding:10px 16px}.comparison-column-heading>a{font-size:16pt}.comparison-period>h2{break-after:avoid;padding:5px 16px}.comparison-period .chronicle-event{break-inside:avoid}}

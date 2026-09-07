@@ -52,6 +52,7 @@ for p,parser in parsed.items():
 recovered=json.loads((ROOT/'site/content/articles.json').read_text())
 assert len(recovered)==83
 articles=[a for a in recovered+json.loads((ROOT/'site/content/additions.json').read_text()) if a['id']!='196']
+articles += [a for a in json.loads((ROOT/'site/content/chronicles-2019.json').read_text()) if a['primaryEdition']=='2019']
 standard_chronicle_source='来源：中华人民共和国大事记（1949年10月—2009年9月）'
 def unwrap_source(line):
     pairs={'（':'）','(':')'}
@@ -71,7 +72,8 @@ for a in articles:
         sources=[unwrap_source(line) for line in expected_lines if re.match(r'^[（(]?来源[：:]',line)]
         events=[line for line in expected_lines if not re.match(r'^[（(]?来源[：:]',line)]
         is_annual=bool(re.search(r'（\d{4}年）',a['title']))
-        if is_annual: sources=[standard_chronicle_source]
+        expected_source='来源：'+a['source'] if a.get('edition')=='2019' else standard_chronicle_source
+        if is_annual: sources=[expected_source]
         expected='\n'.join(sources+events)
         if re.sub(r'\s+','', ''.join(content.text)) != re.sub(r'\s+','',expected): errors.append(f'Altered or truncated content {a["id"]}')
         if is_annual and sources:
@@ -79,7 +81,7 @@ for a in articles:
             event_position=markup.find('class="chronicle-event"')
             if source_position < 0 or event_position < 0 or source_position > event_position:
                 errors.append(f'Source is not first in chronicle {a["id"]}')
-            if standard_chronicle_source not in ''.join(content.text):
+            if expected_source not in ''.join(content.text):
                 errors.append(f'Chronicle source was not standardized {a["id"]}')
 font_css=(SITE/'assets/fonts/embedded.css').read_text()
 assert font_css.count('data:font/woff2;base64,')==2
@@ -93,10 +95,10 @@ for tag,key,url,_ in root_parser.references:
         if dest.is_dir(): dest=dest/'index.html'
         assert dest.is_file(), 'Root entry broken: ' + url
 search_index=(SITE/'assets/search-index.js').read_text()
-assert search_index.count(standard_chronicle_source)==61, 'All 61 annual chronicles must use the standardized source in search'
+assert search_index.count(standard_chronicle_source)==61, 'All 61 original annual chronicles must use the 2009 source in search'
 modern=(SITE/'archives/category/现代史·大事记/index.html').read_text()
 assert 'chronicle-opening' in modern and 'chronicle-intro' in modern
-assert modern.count('分钟阅读')==61, 'All 61 years from 1949 to 2009 must be present'
+assert modern.count('分钟阅读')==71, 'All 71 years from 1949 to 2019 must be present'
 assert 'data-file-href="../../71/index.html"' in modern, 'Chronicle category must link 2007 to article 71'
 assert (SITE/'archives/71/index.html').is_file(), 'Article 71 must publish the 2007 chronicle'
 assert not (SITE/'archives/2007').exists(), 'The former 2007 route must fall through to 404'
@@ -118,4 +120,4 @@ assert '本网站所载资料具有其写作年代的表述与信息边界' in a
 assert 'class="source-facts"' not in about and '首页存档日期' not in about and '>存档日期<' not in about
 if errors:
     print('\n'.join(errors)); raise SystemExit(f'{len(errors)} portable checks failed')
-print(f'PASS: {len(parsed)} HTML pages; all local assets, links and anchors resolve; all {len(articles)} published articles present (83 recovered records retained); two embedded fonts; no module scripts or network dependencies.')
+print(f'PASS: {len(parsed)} HTML pages; all local assets, links and anchors resolve; all {len(articles)} base articles present (83 recovered records retained); two embedded fonts; no module scripts or network dependencies.')

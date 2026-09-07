@@ -3,6 +3,7 @@ import { SiteHeader, SiteFooter } from '@/components/site-header';
 import { absoluteUrl, siteUrl } from '@/lib/content';
 import { openGraph, serializeJsonLd, siteDescription, siteName, twitterCard } from '@/lib/seo';
 import './globals.css';
+import './chronicle-versions.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${siteUrl}/`),
