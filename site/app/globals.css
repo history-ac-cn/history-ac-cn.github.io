@@ -78,3 +78,5 @@ mark{background:var(--theme-mark);color:var(--theme-mark-text)}
 .theme-choice[aria-pressed="true"]{border-color:var(--blue);background:var(--soft-blue);color:var(--blue)}
 .theme-status{font-size:12px!important;color:var(--theme-text-tertiary)!important;margin-top:13px!important}
 @media(max-width:540px){.theme-choice{flex-direction:column;gap:5px;min-height:70px;padding-inline:6px;font-size:13px}}
+.preferred-wrap-segment{display:inline-block;white-space:nowrap}
+@media(max-width:340px){.preferred-wrap-segment{display:block;white-space:normal}}
