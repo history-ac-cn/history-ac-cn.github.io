@@ -92,6 +92,6 @@ for resource in resources:
     if resource.suffix == '.css':
         assert resource.stat().st_size < 80_000, 'Unexpectedly large render-blocking CSS.'
 assert (SITE / 'assets/logo-header.webp').stat().st_size < 35_000
-assert (SITE / 'assets/logo-about.webp').stat().st_size < 230_000
+assert (SITE / 'assets/logo-about.webp').stat().st_size < 145_000
 assert (SITE / 'assets/favicon.png').stat().st_size < 15_000
 print(f'PASS: homepage resources {total:,} bytes before HTTP compression; small CSS, on-demand font subsets, offline fallback, and search-only index.')

@@ -133,7 +133,7 @@ npm run build
 
 字体刷新会同时生成完整嵌入版与在线分段版。若只修改了首页文案，可在构建后运行 `python3 scripts/optimize-fonts.py`，再重新构建，以更新常用字符分组；该命令同样需要 `fonttools[woff]`。常规构建直接使用仓库中的生成字体，不需要安装字体处理工具。
 
-新版 logo 延续了原站由站长绘制的蓝色环带地球构图。网页使用适合页眉及关于页尺寸的 WebP 图片，保留至少四倍显示尺寸的像素并采用无损编码，原始 PNG 仍用于分享元数据和原图留存。更换原图后可在安装了 `cwebp` 的 macOS 环境运行 `sh scripts/optimize-logo.sh` 重新生成网页图片和图标。原版、新版和重建参考资料均保存在 `recovery/`。界面图标来自 [Lucide](https://lucide.dev/)，其 ISC 许可证随网站资源一并保留。
+新版 logo 延续了原站由站长绘制的蓝色环带地球构图。网页使用适合页眉及关于页尺寸的 WebP 图片，保留至少四倍显示尺寸的像素并采用无损编码，原始 PNG 仍用于分享元数据和原图留存。关于页图片在缩放后进一步无损压缩，并省略完全透明像素中不可见的颜色数据，保持可见像素和透明度不变。更换原图后可在安装了 `cwebp` 的 macOS 环境运行 `sh scripts/optimize-logo.sh` 重新生成网页图片和图标。原版、新版和重建参考资料均保存在 `recovery/`。界面图标来自 [Lucide](https://lucide.dev/)，其 ISC 许可证随网站资源一并保留。
 
 2026 年 9 月 7 日，图标清除了蓝色环带后方的白色大陆及轮廓，采用透明度清理保留原有环带像素，适配深色背景。修改前的原图、网页尺寸版本与校验清单位于 [`recovery/logo-before-continent-removal-2026-09-07/`](recovery/logo-before-continent-removal-2026-09-07/)。处理脚本为 `scripts/remove-logo-continents.py`，需要 Pillow、NumPy 和 SciPy；常规构建无需安装这些图片处理依赖。
 

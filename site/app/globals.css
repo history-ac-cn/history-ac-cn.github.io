@@ -26,6 +26,7 @@
 .about-body .original-about p{font-family:var(--serif);font-size:16px;line-height:2.1;color:#54778c;margin:0 0 18px}
 .about-body .original-about p:last-of-type{margin-bottom:17px}
 .about-body .original-about cite{font-size:13px}
+.about-archive-link{color:var(--blue);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
 .chronicle-opening{align-items:center}.chronicle-opening>div{flex:1}.chronicle-opening>svg{margin-top:0}.chronicle-opening .eyebrow{font-size:13px;letter-spacing:1px;margin:0}.chronicle-opening:hover{background:#e9f3f9}.opening-action{display:flex;align-items:center;gap:12px;white-space:nowrap;font-size:13px}
 .prose p.chronicle-event{margin:0 0 1.6em}.prose .chronicle-source{font-size:inherit;color:#8a9da8;line-height:1.9}
 .icp-link:hover{color:var(--blue)}
