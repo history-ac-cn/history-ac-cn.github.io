@@ -102,11 +102,14 @@ assert 'data-retired-article-href=' in (SITE/'404.html').read_text(), 'Legacy ar
 assert '存档暂缺' not in modern and '2007 年暂缺' not in modern
 assert '以下按原站内容整理' not in modern
 about=(SITE/'about/index.html').read_text()
-assert '高中时期写的的那段「关于」' in about and '恢复的存档文章' in about
+assert '高中时期写的的那段「关于」' in about and '本站往事' in about
 assert '旧站的那段「关于」' not in about and '今天，我们仍然相信这段话背后的愿望' not in about
 assert '旧站“关于”页面说明，' not in about
 assert '2007 年暂缺' not in about and '目前没有恢复出' not in about
 assert '中国历史学习网（Chinese History Learning Network）是一个没有任何广告的非盈利性质网站' in about
+assert '历史资料出于学术目的整理、转载自《中华人民共和国年鉴》《中华人民共和国大事记》等文献' in about
+assert '本网站所载资料具有其写作年代的表述与信息边界' in about
+assert 'class="source-facts"' not in about and '首页存档日期' not in about and '>存档日期<' not in about
 if errors:
     print('\n'.join(errors)); raise SystemExit(f'{len(errors)} portable checks failed')
 print(f'PASS: {len(parsed)} HTML pages; all local assets, links and anchors resolve; all {len(articles)} published articles present (83 recovered records retained); two embedded fonts; no module scripts or network dependencies.')
