@@ -1,4 +1,4 @@
-/** Compare every imported and rendered paragraph with the supplied source file. */
+/** Compare every rendered paragraph with local source text or committed content. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,8 +11,12 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const originals = ['articles', 'additions'].flatMap(name => JSON.parse(read(`site/content/${name}.json`))).filter(chronicleYear);
 const editions = JSON.parse(read('site/content/chronicles-2019.json'));
-const parsed = parseChronicleEdition(read(editionTextPath));
-const continuation = parseChronicleEdition(read(editionContinuationPath), { startYear: 2010, endYear: 2019 });
+const sourceYears = (file, startYear, endYear) => fs.existsSync(path.join(root, file))
+  ? parseChronicleEdition(read(file), { startYear, endYear })
+  : editions.filter(article => article.year >= startYear && article.year <= endYear).map(article => ({ year: article.year, paragraphs: article.text.split(/\n\s*\n/).slice(1) }));
+const parsed = sourceYears(editionTextPath, 1949, 2009);
+const continuation = sourceYears(editionContinuationPath, 2010, 2019);
+assert.deepEqual([...parsed, ...continuation].map(article => article.year), Array.from({ length: 71 }, (_, index) => 1949 + index));
 assert.equal(editions.length, 71);
 assert.equal(continuation.length, 10);
 assert.equal(continuation.reduce((sum, item) => sum + item.paragraphs.length, 0), 244);
@@ -21,7 +25,7 @@ assert.equal(parsed.reduce((sum, item) => sum + item.paragraphs.length, 0), 513)
 assert.throws(() => parseChronicleEdition('一九四九年\n\n记事\n\n一九四九年\n\n记事'), /Duplicate/);
 assert.throws(() => parseChronicleEdition('一九四九年\n\n记事'), /every year/);
 const decode = text => text.replaceAll('&quot;', '"').replaceAll('&#x27;', "'").replaceAll('&#39;', "'").replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
-const eventTexts = html => [...html.matchAll(/<p\b[^>]*class="chronicle-event"[^>]*>([\s\S]*?)<\/p>/g)].map(match => decode(match[1]));
+const eventTexts = html => [...html.matchAll(/<p\b[^>]*class="chronicle-event"[^>]*>([\s\S]*?)<\/p>/g)].map(match => decode(match[1].replace(/<span\b[^>]*>|<\/span>|<!--[\s\S]*?-->/g, '')));
 let paragraphs = 0;
 for (const source of parsed) {
   const original = originals.find(article => chronicleYear(article) === source.year);

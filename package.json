@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npm --prefix site run dev",
     "build": "npm --prefix site run build && node scripts/make-portable.mjs && npm run verify",
-    "verify": "python3 scripts/verify-portable.py && node scripts/verify-interactions.mjs && node scripts/verify-navigation.mjs && node scripts/verify-editions.mjs && node scripts/verify-seo.mjs && node scripts/verify-theme.mjs && python3 scripts/verify-performance.py",
+    "verify": "python3 scripts/verify-portable.py && node scripts/verify-interactions.mjs && node scripts/verify-navigation.mjs && node scripts/verify-editions.mjs && node scripts/verify-alignment.mjs && node scripts/verify-seo.mjs && node scripts/verify-theme.mjs && python3 scripts/verify-performance.py",
     "typecheck": "npm --prefix site run typecheck"
   }
 }

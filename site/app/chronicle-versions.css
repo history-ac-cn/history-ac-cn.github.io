@@ -20,14 +20,21 @@
 .comparison-column-heading+header,.comparison-cell+.comparison-cell{border-left:1px solid var(--line)}
 .comparison-column-heading>a{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--serif);font-size:24px;color:var(--blue)}
 .comparison-column-heading>p{font-family:var(--serif);font-size:inherit;line-height:1.85;color:var(--theme-text-tertiary);margin:12px 0 0;overflow-wrap:anywhere}
-.comparison-period{scroll-margin-top:22px}
+.comparison-period{scroll-margin-top:22px;--comparison-inset-block:26px;--comparison-inset-inline:30px}
 .comparison-period>h2{margin:0;padding:11px 30px;border-block:1px solid var(--line);font-size:14px;font-weight:500;letter-spacing:1px;color:var(--theme-text-soft-blue);background:var(--theme-section)}
-.comparison-cell.prose{font-size:inherit;min-width:0;padding:26px 30px 8px;line-height:2.15}
+.comparison-cell.prose{font-size:inherit;min-width:0;padding:0 var(--comparison-inset-inline);line-height:2.15}
+.comparison-event-row:first-child>.comparison-cell{padding-top:var(--comparison-inset-block)}
+.comparison-event-row:last-child>.comparison-cell{padding-bottom:8px}
 .comparison-cell.prose>p:first-child:has(+p){margin-top:0}
 .comparison-cell .chronicle-event{scroll-margin-top:24px}
-.comparison-cell .comparison-empty{font-family:'History Sans',sans-serif;font-size:13px;color:var(--theme-text-tertiary);margin-bottom:24px}
+.comparison-reference{scroll-margin-top:100px}
+.comparison-reference:target{background:var(--theme-mark);color:var(--theme-mark-text);border-radius:2px;box-shadow:0 0 0 2px var(--theme-mark);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.comparison-cell .comparison-empty{display:flex;align-items:center;min-height:2.15em;font-family:'History Sans',sans-serif;font-size:inherit;color:var(--theme-text-tertiary);margin:0 0 24px}
+.comparison-empty>span{font-size:13px;line-height:1}
+.comparison-empty .comparison-note-link{color:inherit;text-decoration:underline;text-decoration-color:currentColor;text-underline-offset:3px}
+.comparison-empty .comparison-note-link:hover{color:var(--blue)}
 .compare-mobile-hint{display:none}
-@media(max-width:800px){.compare-heading h1{font-size:44px;gap:12px}.compare-heading h1>span{font-size:25px}.comparison-cell.prose,.comparison-column-heading{padding:22px}.comparison-period>h2{padding-inline:22px}}
+@media(max-width:800px){.compare-heading h1{font-size:44px;gap:12px}.compare-heading h1>span{font-size:25px}.comparison-column-heading{padding:22px}.comparison-period{--comparison-inset-block:22px;--comparison-inset-inline:22px}.comparison-period>h2{padding-inline:22px}}
 @media(max-width:760px){.compare-mobile-hint{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--theme-text-secondary);margin:0 0 13px}.comparison-grid{font-size:17px}.compare-months{gap:5px;padding-block:16px}.compare-toolbar{gap:12px;flex-wrap:wrap}.compare-heading h1{gap:8px 12px}.compare-heading h1>span{font-size:22px}}
 @media(max-width:540px){.chronicle-versions{gap:3px;font-size:12px}.chronicle-versions a{padding:8px 10px}.version-label{margin-right:4px}.compare-heading h1{font-size:36px}.compare-heading h1>span{font-size:20px}.compare-toolbar .version-label{display:none}.compare-toolbar .font-controls{gap:5px}.compare-toolbar .chronicle-versions a{padding-inline:8px}}
-@media print{.chronicle-versions,.compare-toolbar,.compare-months,.compare-mobile-hint{display:none!important}.comparison-scroll{overflow:visible;border:0}.comparison-grid{min-width:0;font-size:10pt}.comparison-cell.prose,.comparison-column-heading{padding:10px 16px}.comparison-column-heading>a{font-size:16pt}.comparison-period>h2{break-after:avoid;padding:5px 16px}.comparison-period .chronicle-event{break-inside:avoid}}
+@media print{.chronicle-versions,.compare-toolbar,.compare-months,.compare-mobile-hint{display:none!important}.comparison-scroll{overflow:visible;border:0}.comparison-grid{min-width:0;font-size:10pt}.comparison-column-heading{padding:10px 16px}.comparison-period{--comparison-inset-block:10px;--comparison-inset-inline:16px}.comparison-column-heading>a{font-size:16pt}.comparison-period>h2{break-after:avoid;padding:5px 16px}.comparison-period .chronicle-event{break-inside:avoid}}

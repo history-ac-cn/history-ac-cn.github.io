@@ -9,3 +9,5 @@ site/.vite/
 .env
 .env.*
 !.env.example
+/recovery/
+/sidenote/

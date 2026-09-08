@@ -2,8 +2,18 @@ import fs from 'node:fs/promises';
 import { editionTextPath, editionContinuationPath, parseChronicleEdition, chronicleYear, source2019 } from '../site/lib/chronicle-editions.mjs';
 
 const root = new URL('../', import.meta.url);
-const text = await fs.readFile(new URL(editionTextPath, root), 'utf8');
-const continuation = await fs.readFile(new URL(editionContinuationPath, root), 'utf8');
+const readLocalSource = async file => {
+  try { return await fs.readFile(new URL(file, root), 'utf8'); }
+  catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+};
+const [text, continuation] = await Promise.all([editionTextPath, editionContinuationPath].map(readLocalSource));
+// Local recovery material is optional and never needed by a fresh checkout or CI.
+if (text === null && continuation === null) {
+  await fs.access(new URL('site/content/chronicles-2019.json', root));
+  console.log('Using committed 2019 edition; no local recovery text to import.');
+  process.exit(0);
+}
+if (text === null || continuation === null) throw new Error('Local edition import requires both recovery text files; restore the missing file or use the committed JSON without local source files.');
 const parsed = [...parseChronicleEdition(text), ...parseChronicleEdition(continuation, { startYear: 2010, endYear: 2019 })];
 const originals = (await Promise.all(['articles', 'additions'].map(name => fs.readFile(new URL(`site/content/${name}.json`, root), 'utf8').then(JSON.parse)))).flat();
 const byYear = new Map(originals.filter(chronicleYear).map(article => [chronicleYear(article), article]));

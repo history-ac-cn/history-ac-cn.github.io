@@ -10,6 +10,8 @@ const originals = ['articles', 'additions'].flatMap(name => JSON.parse(fs.readFi
 const editions = JSON.parse(fs.readFileSync(path.join(root, 'site/content/chronicles-2019.json'), 'utf8'));
 const articles = searchableArticles(originals, editions);
 const listeners = {};
+const windowListeners = {};
+let comparisonTarget = null;
 const input = { value: '', focus() { this.focused = true; } };
 const status = { textContent: '' }, empty = { hidden: true };
 const rows = articles.map(a => ({ dataset: { articleId: a.id }, textContent: a.title + a.excerpt, paragraph: { textContent: a.excerpt }, querySelector() { return this.paragraph; } }));
@@ -23,9 +25,9 @@ const document = {
   addEventListener(type, callback) { listeners[type] = callback; },
   getElementById(id) { return { 'search-input': input, 'search-status': status, 'search-empty': empty, 'article-body': body }[id] || null; },
   querySelectorAll(selector) { return selector === '[data-article-id]' ? rows : []; },
-  querySelector(selector) { return { '[data-font="smaller"]': smaller, '[data-font="larger"]': larger, '.main-nav': nav, '.menu-toggle': toggle, '.search-link': searchLink }[selector] || null; },
+  querySelector(selector) { return { '[data-font="smaller"]': smaller, '[data-font="larger"]': larger, '.main-nav': nav, '.menu-toggle': toggle, '.search-link': searchLink, '.comparison-reference:target': comparisonTarget }[selector] || null; },
 };
-const window = { addEventListener() {}, scrollY: 0, innerHeight: 800 };
+const window = { addEventListener(type, callback) { windowListeners[type] = callback; }, scrollY: 0, innerHeight: 800 };
 const context = vm.createContext({ window, document, URL, URLSearchParams, location: { href: 'file:///site/search/index.html', search: '' }, history: { replaceState() {} }, getComputedStyle: () => ({ fontSize: '18px' }), MutationObserver: class { observe() {} }, requestAnimationFrame: cb => cb() });
 vm.runInContext(fs.readFileSync(path.join(root, 'preview/assets/search-index.js'), 'utf8'), context);
 vm.runInContext(fs.readFileSync(path.join(root, 'preview/assets/site.js'), 'utf8'), context);
@@ -46,4 +48,16 @@ for (let i=0;i<20;i++) clickFont(smaller); assert.equal(body.style.fontSize, '16
 toggle.click(); assert.equal(toggle.attrs['aria-expanded'], 'true'); assert.equal(nav.open, true);
 listeners.keydown({ key: 'Escape', target: { tagName: 'BODY' } }); assert.equal(toggle.attrs['aria-expanded'], 'false'); assert.equal(nav.open, false);
 let prevented = false; listeners.keydown({ key: '/', target: { tagName: 'BODY' }, preventDefault() { prevented = true; } }); assert(prevented && input.focused);
-console.log('PASS: full-text search, full-width normalization, multiple terms, safe empty results, font-size limits, mobile menu and keyboard shortcuts.');
+const comparisonScroll = { scrollLeft: 0, clientWidth: 348, scrollWidth: 700, getBoundingClientRect: () => ({ left: 20 }) };
+let targetColumnLeft = 371;
+comparisonTarget = { closest: selector => selector === '.comparison-scroll' ? comparisonScroll : { getBoundingClientRect: () => ({ left: targetColumnLeft, width: 350 }) } };
+windowListeners.hashchange();
+assert.equal(comparisonScroll.scrollLeft, 352, 'A right-column reference must become visible on narrow screens');
+targetColumnLeft = -331;
+windowListeners.hashchange();
+assert(comparisonScroll.scrollLeft < 10, 'A left-column reference must return to the left side, allowing centering at the border');
+comparisonTarget = null;
+comparisonScroll.scrollLeft = 123;
+windowListeners.resize();
+assert.equal(comparisonScroll.scrollLeft, 123, 'Ordinary reading must preserve the user’s horizontal position');
+console.log('PASS: full-text search, full-width normalization, multiple terms, safe empty results, font-size limits, mobile menu, keyboard shortcuts, and narrow-screen reference visibility.');

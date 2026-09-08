@@ -32,6 +32,21 @@
   window.HistorySite = { normalize, search };
   let lastSearchInput = null;
   let readerSize = 18;
+  // Fragment scrolling can leave the target column outside a narrow scroll area.
+  // Reveal that column without changing the native vertical anchor position.
+  const revealComparisonReference = () => {
+    const target = document.querySelector('.comparison-reference:target');
+    const container = target?.closest('.comparison-scroll');
+    const cell = target?.closest('.comparison-cell');
+    if (!container || !cell || container.scrollWidth <= container.clientWidth) return;
+    const bounds = cell.getBoundingClientRect();
+    const left = container.scrollLeft + bounds.left - container.getBoundingClientRect().left - (container.clientWidth - bounds.width) / 2;
+    container.scrollLeft = Math.max(0, Math.min(container.scrollWidth - container.clientWidth, left));
+  };
+  const queueReferenceReveal = () => requestAnimationFrame(revealComparisonReference);
+  window.addEventListener('hashchange', queueReferenceReveal);
+  window.addEventListener('pageshow', queueReferenceReveal);
+  window.addEventListener('resize', queueReferenceReveal);
   const initialize = () => {
     const input = document.getElementById('search-input');
     if (input && input !== lastSearchInput) {
@@ -104,5 +119,6 @@
     });
   }, { passive: true });
   initialize();
+  queueReferenceReveal();
   new MutationObserver(initialize).observe(document.body, { childList: true, subtree: true });
 })();

@@ -1,0 +1,1293 @@
+{
+  "schemaVersion": 1,
+  "description": "人工核对的段落对应关系。matches 每项为 [左版段落序号数组, 右版段落序号数组]，序号从 1 开始。未列出的段落独立错开展示；数组不会改变原文分段。sourceHash 防止正文更新后沿用失效的对应关系。 unalignedRelations 保留因顺序、完整段落或时段归属限制而未能对齐的已知关联，不将其标为本版此事无记载。 crossYearRelations 区分 recorded（完整记载）、mentioned（简要或部分提及）和 related（仅有待核对的关联、留空）；otherTextHash 绑定另年引用段落。 unalignedRelations.notes 的 left/right 表示原事件所在栏，文字显示在其对侧空位；跨时段位置提示优先于一般空缺提示。crossYearRelations.otherPeriod 记录另年对应段落所在时段，提示区分有记载与有提及。 otherHighlight 保存另年对应段落中经核对的高亮原文，用于对比页的站内高亮锚点。",
+  "years": {
+    "68": {
+      "year": 2009,
+      "sourceHash": "f4e5c13ae042e830bbd0d7777fac02cb1faf31de7ff86cf83f9f1c2696faedeb",
+      "matches": [
+        [[2], [2]],
+        [[9], [3]],
+        [[17], [7]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [13],
+          "right": [6],
+          "reason": "新型农村社会养老保险试点会议与指导意见分别记于 8 月和 9 月。",
+          "notes": {
+            "left": "此事在本版之本年 9 月处有提及",
+            "right": "此事在本版之本年 8 月处有提及"
+          }
+        }
+      ]
+    },
+    "70": {
+      "year": 2008,
+      "sourceHash": "0cc573fb1ec6293c36085c55be19327ee7fcfaadb33f64c5e9ed739e5bfc08fa",
+      "matches": [
+        [[4], [2]],
+        [[5], [3]],
+        [[7], [4]],
+        [[8], [6]],
+        [[9], [9]],
+        [[10], [10]],
+        [[13], [12]],
+        [[16], [13]],
+        [[18], [14]],
+        [[22], [16]],
+        [[23], [17]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [15],
+          "right": [11],
+          "reason": "11 月扩大内需措施包含于右版 10 月应对金融危机段落。",
+          "notes": {
+            "left": "此事在本版之本年 10 月处有提及",
+            "right": "此事在本版之本年 11 月处有提及"
+          }
+        }
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 12,
+          "otherArticleId": "78",
+          "otherYear": 2003,
+          "otherEvent": 10,
+          "otherTextHash": "e09303772f126399f69a94f9443443d628950d822525f17bb40e2c324631ce4d",
+          "kind": "recorded",
+          "reason": "神舟七号出舱活动明确记载于 2003 年神舟五号段落的后续记事。",
+          "otherPeriod": "10 月",
+          "otherHighlight": "2008年9月27日，神舟七号载人飞船实施宇航员空间出舱活动，中国成为世界上第三个独立掌握空间出舱技术的国家。"
+        },
+        {
+          "side": "left",
+          "event": 21,
+          "otherArticleId": "71",
+          "otherYear": 2007,
+          "otherEvent": 7,
+          "otherTextHash": "394058ebabe4915c17648dd1709a71a093c351cac9f942c647389f9aec4eb37e",
+          "kind": "recorded",
+          "reason": "2008 年军人核心价值观明确记载于 2007 年建军八十周年段落。",
+          "otherPeriod": "8 月",
+          "otherHighlight": "2008年12月24日，胡锦涛在中央军委扩大会议上讲话，提出忠诚于党、热爱人民、报效国家、献身使命、崇尚荣誉的当代革命军人核心价值观。"
+        }
+      ]
+    },
+    "71": {
+      "year": 2007,
+      "sourceHash": "d2e769388c6edbc02e463331b86a23dc4cd3aec544e1e808c6f3da487c6c1803",
+      "matches": [
+        [[1], [1]],
+        [[4], [3]],
+        [[9], [6]],
+        [[10], [7]],
+        [[13], [9, 10]],
+        [[14], [11]]
+      ]
+    },
+    "72": {
+      "year": 2006,
+      "sourceHash": "fc72258e7b0b35a25af136b9e703ed93d23aeb3b8252203fba791b7098dd8c6c",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [4]],
+        [[6], [5]],
+        [[13], [8]],
+        [[14], [9]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [5],
+          "right": [6],
+          "reason": "2006 年 4 月：两岸经贸论坛及对台措施与中部崛起政策条目次序相反。"
+        }
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 10,
+          "otherArticleId": "83",
+          "otherYear": 2001,
+          "otherEvent": 7,
+          "otherTextHash": "66a32131d6e5b17804964070fd10b98a985879c4ef930a40a3e26ea695ca126d",
+          "kind": "recorded",
+          "reason": "2006 年青藏铁路全线通车明确记载于 2001 年铁路开工段落的后续记事。",
+          "otherPeriod": "6 月",
+          "otherHighlight": "2006年7月1日，青藏铁路全线建成通车。"
+        }
+      ]
+    },
+    "74": {
+      "year": 2005,
+      "sourceHash": "acc2d446938f6b3521942dbb34c0bf92eee9056c9b8a663e7e96f4b08389e0d2",
+      "matches": [
+        [[1], [1]],
+        [[5], [4]],
+        [[8], [5]],
+        [[9], [6]],
+        [[11], [8]],
+        [[16], [9]],
+        [[17], [10]],
+        [[18], [11]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 6,
+          "otherArticleId": "76",
+          "otherYear": 2004,
+          "otherEvent": 11,
+          "otherTextHash": "abe4c6f843e003ad783656d27662ffa62a788cb06200029ef7740508a88c6316",
+          "kind": "mentioned",
+          "reason": "两年讲话阐述相近的军队历史使命，场合和日期不同；按简要或部分提及提示。",
+          "otherPeriod": "12 月",
+          "otherHighlight": "12月24日 胡锦涛在中央军委扩大会议上讲话，提出新世纪新阶段人民解放军的历史使命：为党巩固执政地位提供重要力量保证，为维护国家发展的重要战略机遇期提供坚强安全保障，为维护国家利益提供有力战略支撑，为维护世界和平与促进共同发展发挥重要作用。"
+        }
+      ]
+    },
+    "76": {
+      "year": 2004,
+      "sourceHash": "ed1a5bad3dbb6e46e2ca989f2170196af5211b3aea55907bb890edb5933b0cd1",
+      "matches": [
+        [[1], [1]],
+        [[3], [2]],
+        [[4], [3]],
+        [[5], [4]],
+        [[7], [7]],
+        [[9], [8]],
+        [[10], [9]],
+        [[11], [10]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "right",
+          "event": 11,
+          "otherArticleId": "74",
+          "otherYear": 2005,
+          "otherEvent": 6,
+          "otherTextHash": "797ae27f793e7f71253e8b41c705bfb802f85576abf6b8fdcd00f2ce96961dd6",
+          "kind": "mentioned",
+          "reason": "两年讲话阐述相近的军队历史使命，场合和日期不同；按简要或部分提及提示。",
+          "otherPeriod": "3 月",
+          "otherHighlight": "３月１３日　胡锦涛在十届全国人大三次会议解放军代表团全体会议上讲话，对我军的历史使命提出新要求：为中国共产党巩固执政地位提供重要的力量保证，为维护国家发展的重要战略机遇提供坚强的安全保障，为维护国家利益提供有力的战略支撑，为维护世界和平与促进共同发展发挥重要作用。"
+        },
+        {
+          "side": "left",
+          "event": 12,
+          "otherArticleId": "81",
+          "otherYear": 2002,
+          "otherEvent": 2,
+          "otherTextHash": "bbc5bbe802b36ce0824599317ec865539dfa7f86416a553777abecacd3185c17",
+          "kind": "mentioned",
+          "reason": "西气东输建成运营与另一版 2002 年开工是不同阶段，不能据此确定运营事件有对应记载。",
+          "otherPeriod": "7 月",
+          "otherHighlight": "7月4日 西气东输一线工程（新疆轮南至上海）开工典礼举行。此后又建设了西气东输二线工程、三线工程。"
+        }
+      ]
+    },
+    "78": {
+      "year": 2003,
+      "sourceHash": "09114837ce1f6ee0f473b88ec4c8341b6a2966e7081f14677993cd1eb02ee281",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [4]],
+        [[5], [5]],
+        [[9], [8]],
+        [[10], [9]],
+        [[11], [10]],
+        [[12], [13]],
+        [[13], [14]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [6],
+          "right": [7],
+          "reason": "8 月江西考察提出科学发展观包含于左版 4 月段落的后续记事。",
+          "notes": {
+            "left": "此事在本版之本年 8 月处有提及",
+            "right": "此事在本版之本年 4 月处有记载"
+          }
+        }
+      ]
+    },
+    "81": {
+      "year": 2002,
+      "sourceHash": "defa157fcc98712f9b440da1c4c61959d4c054cbd23b7a23262071297f243ba7",
+      "matches": [
+        [[1], [1]],
+        [[7], [4]],
+        [[9], [5, 6]],
+        [[11], [7]],
+        [[12], [8]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "right",
+          "event": 2,
+          "otherArticleId": "76",
+          "otherYear": 2004,
+          "otherEvent": 12,
+          "otherTextHash": "d786d111764987c0fb441746de752abb6bc00ceacb7c1ddb83db5e45c6f73b7b",
+          "kind": "mentioned",
+          "reason": "西气东输开工与建成运营属于同一工程的不同阶段，不能据此确定本次开工有对应记载。",
+          "otherPeriod": "12 月",
+          "otherHighlight": "１２月３０日　西气东输工程（新疆轮南至上海）全线建成并正式运营。该工程全长约４０００公里，设计年输气量１２０亿立方米。"
+        },
+        {
+          "side": "left",
+          "event": 8,
+          "otherArticleId": "67",
+          "otherYear": 2010,
+          "otherEvent": 1,
+          "otherTextHash": "f2763251b50c6b9b21dddb8bf96a3e4d0e399050e452ab59acd6c235397677cd",
+          "kind": "related",
+          "reason": "自贸区框架协议与 2010 年正式启动属于同一进程的不同阶段，不能据此确定协议事件有对应记载。",
+          "otherPeriod": "1 月"
+        }
+      ]
+    },
+    "83": {
+      "year": 2001,
+      "sourceHash": "4da174cc953f9f5298bb79ade96f45cf4cffc0dc1a596942dfc2dc878d9786c7",
+      "matches": [
+        [[1], [3]],
+        [[3], [5]],
+        [[4], [6]],
+        [[5], [8]],
+        [[8], [10]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "right",
+          "event": 4,
+          "otherArticleId": "81",
+          "otherYear": 2002,
+          "otherEvent": 3,
+          "otherTextHash": "eefc0753104edce56d6ca7e810770bc6f3d723cdc016f987d1741e43c19e3df2",
+          "kind": "mentioned",
+          "reason": "另一版记载本段后续的 2002 年博鳌论坛首届年会，未直接记载开头的 2001 年成立大会；按简要或部分提及提示。",
+          "otherPeriod": "4 月",
+          "otherHighlight": "４月１２日－１３日　博鳌亚洲论坛首届年会在海南省举行。"
+        },
+        {
+          "side": "right",
+          "event": 7,
+          "otherArticleId": "72",
+          "otherYear": 2006,
+          "otherEvent": 10,
+          "otherTextHash": "2356bb3f434ce026faed1942f7ba2ee91ae96b979fb360c4eb6df7192157a6d5",
+          "kind": "mentioned",
+          "reason": "另一版记载本段后续的 2006 年青藏铁路通车，未直接记载开头的 2001 年开工典礼；按简要或部分提及提示。",
+          "otherPeriod": "7 月",
+          "otherHighlight": "７月１日　青藏铁路全线建成通车。青藏铁路是世界上海拔最高、线路最长的高原铁路，全长１９５６公里。"
+        }
+      ]
+    },
+    "85": {
+      "year": 2000,
+      "sourceHash": "8247b9b9f6d2f3f6dbb40a941cdec68e975e725dd03cfe8894a1286735689cd4",
+      "matches": [
+        [[1], [1]],
+        [[3], [3]],
+        [[5], [6]],
+        [[6], [8]]
+      ]
+    },
+    "87": {
+      "year": 1999,
+      "sourceHash": "db1c2e66603a99b3392c35e2b852d910e149ac62b109270d902486f2901b2202",
+      "matches": [
+        [[3], [1]],
+        [[4], [2]],
+        [[6], [3]],
+        [[7], [4]],
+        [[9], [5]]
+      ]
+    },
+    "89": {
+      "year": 1998,
+      "sourceHash": "1f9a766a2c4e5111db73e97e532c077700a138e9d9f2d4e8a8cc9f7b4a2ac178",
+      "matches": [
+        [[1], [2]],
+        [[2], [3]],
+        [[6], [4]],
+        [[8], [5]],
+        [[11], [7]],
+        [[13], [8]],
+        [[14], [9]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 9,
+          "otherArticleId": "109",
+          "otherYear": 1988,
+          "otherEvent": 1,
+          "otherTextHash": "78826c040686051ea2a0eecd43ab093489cd34d8a07c20d96579c5e26765cdbd",
+          "kind": "recorded",
+          "reason": "1998 年住房制度改革通知明确记载于 1988 年住房改革段落。",
+          "otherPeriod": "2 月",
+          "otherHighlight": "1998年7月3日，国务院印发《关于进一步深化城镇住房制度改革加快住房建设的通知》，提出停止住房实物分配，逐步实行住房分配货币化。"
+        }
+      ]
+    },
+    "91": {
+      "year": 1997,
+      "sourceHash": "8a3e211b844e17f052ae9beacc142312921c3bb0ca3db80230537fe801187c11",
+      "matches": [
+        [[1], [2]],
+        [[4], [5]],
+        [[6], [6]],
+        [[8], [8]],
+        [[9], [9]],
+        [[10], [10]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [9],
+          "right": [11],
+          "reason": "1997 年 9 月：十五届一中全会包含于左版十五大段落；右版与裁军条目交错。"
+        },
+        {
+          "left": [5],
+          "right": [3],
+          "reason": "重庆直辖市正式成立与批准设立分别记于 6 月和 3 月。",
+          "notes": {
+            "left": "此事在本版之本年 3 月处有提及",
+            "right": "此事在本版之本年 6 月处有提及"
+          }
+        }
+      ]
+    },
+    "93": {
+      "year": 1996,
+      "sourceHash": "f832dee12da7e4a3f3d905fcf71fa5f9e5b83f52aa724d7c8e328fbb16ff86e1",
+      "matches": [
+        [[4], [3]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 1,
+          "otherArticleId": "95",
+          "otherYear": 1995,
+          "otherEvent": 5,
+          "otherTextHash": "a01fc647936658defecb977e26e7980953330aeab5e93a46e98ec0fe29aa84dd",
+          "kind": "recorded",
+          "reason": "1996 年批准九五计划纲要明确记载于 1995 年制定规划建议段落。",
+          "otherPeriod": "9 月",
+          "otherHighlight": "1996年3月17日，八届全国人大四次会议批准《中华人民共和国国民经济和社会发展“九五”计划和2010年远景目标纲要》。"
+        }
+      ]
+    },
+    "95": {
+      "year": 1995,
+      "sourceHash": "89857e5ad1b88cf698fc8f1d78f267d96487ad206fe76bc2a87431646c6e3269",
+      "matches": [
+        [[1], [1]],
+        [[2], [4]],
+        [[5], [5]],
+        [[7], [6]]
+      ]
+    },
+    "97": {
+      "year": 1994,
+      "sourceHash": "cb3bd7184bc380d7e888197b6f8678fad56fb55155784719ff4bd18033d2ddd7",
+      "matches": [
+        [[1], [1]],
+        [[4], [2]],
+        [[5], [3]],
+        [[7], [7]]
+      ]
+    },
+    "99": {
+      "year": 1993,
+      "sourceHash": "133fd7b89fdf33faceb5dc88b4046664b62fa15ce04a821aab252706e13b6296",
+      "matches": [
+        [[1], [1]],
+        [[2], [3]],
+        [[3], [4]],
+        [[4], [5]],
+        [[5], [6]],
+        [[9], [7]],
+        [[10], [9]],
+        [[11], [11]],
+        [[12], [12]],
+        [[13], [14]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [8],
+          "right": [8],
+          "reason": "1993 年 11 月：统战会议起始日期与讲话日期不同，和农业政策条目次序相反。"
+        }
+      ]
+    },
+    "101": {
+      "year": 1992,
+      "sourceHash": "292fe488447004778baa784cc07d71e9622d54d79291873f054d2bf612ccfdfb",
+      "matches": [
+        [[2], [1]],
+        [[3], [3]],
+        [[8], [4, 5]]
+      ]
+    },
+    "103": {
+      "year": 1991,
+      "sourceHash": "4cfb685422a7ec6b8a44389a5c0d09bc97ae40043899292ba87d1b8d7eb9e8ef",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[4], [3]],
+        [[5], [4]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 6,
+          "otherArticleId": "101",
+          "otherYear": 1992,
+          "otherEvent": 6,
+          "otherTextHash": "01413b94856689a8e597de78e68784f4b7fce7f88d596df6488713e35f2dd5f7",
+          "kind": "mentioned",
+          "reason": "本段含次年的九二共识，另一版独立记载共识；海协会成立与后续共识不可视为整段完全对应。",
+          "otherPeriod": "11 月",
+          "otherHighlight": "11月 海峡两岸关系协会与台湾海峡交流基金会，就解决两岸事务性商谈中如何表述坚持一个中国原则的问题，达成“海峡两岸同属一个中国、共同努力谋求国家统一”的共识，后被称为“九二共识”。"
+        }
+      ]
+    },
+    "105": {
+      "year": 1990,
+      "sourceHash": "d0f5d3abef29ce6bf21da54f35fc0ae6f26b91e7c4be36f45346dcf64fe73753",
+      "matches": [
+        [[4], [2]],
+        [[5], [5]],
+        [[6], [6]],
+        [[8], [7]],
+        [[9], [8]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [3],
+          "right": [1],
+          "reason": "香港基本法等决定分别包含于 3 月开始的人大会议和 4 月通过法律的段落。",
+          "notes": {
+            "left": "此事在本版之本年 4 月处有提及",
+            "right": "此事在本版之本年 3 月处有记载"
+          }
+        }
+      ]
+    },
+    "107": {
+      "year": 1989,
+      "sourceHash": "efb219405ec93f10b10ced165cac190c1d3e2acfc8e6aba0375014d9d5986031",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[4], [4]],
+        [[6], [7]],
+        [[9], [8]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 8,
+          "otherArticleId": "128",
+          "otherYear": 1979,
+          "otherEvent": 9,
+          "otherTextHash": "83819ba48807dd6bac78e2fd7901544f551957e68ee5bb97fc6a938dda92e61a",
+          "kind": "mentioned",
+          "reason": "本段三部法律中的环境保护法收在另一版 1979 年条目；其余两部未形成对应，按部分提及提示。",
+          "otherPeriod": "9 月",
+          "otherHighlight": "1989年12月26日，七届全国人大常委会第十一次会议通过《中华人民共和国环境保护法》。"
+        }
+      ]
+    },
+    "109": {
+      "year": 1988,
+      "sourceHash": "e09c74df9b8ce3863976bf443d6677cf79be6bc04604d14120a786926d372777",
+      "matches": [
+        [[1], [1]],
+        [[4], [3]],
+        [[5], [4]],
+        [[7], [5]],
+        [[9], [6]],
+        [[10], [7]],
+        [[11], [8]],
+        [[12], [11]],
+        [[15], [13]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 2,
+          "otherArticleId": "115",
+          "otherYear": 1985,
+          "otherEvent": 3,
+          "otherTextHash": "873bc3074639f747e0af0b93486f5f1ba1f38f8e2bd094f193e92911b966c4ad",
+          "kind": "recorded",
+          "reason": "1988 年扩大沿海经济开放区的通知明确记载于 1985 年沿海开放段落。",
+          "otherPeriod": "2 月",
+          "otherHighlight": "1988年3月18日，国务院发出《关于扩大沿海经济开放区范围的通知》，决定新划入沿海开放区140个市、县，包括杭州、南京、沈阳3个省会城市。"
+        }
+      ]
+    },
+    "111": {
+      "year": 1987,
+      "sourceHash": "9607b93bcaa7da53376d2ccf24c4af5dfdcd68ae1a3d63179af2905779d35ffc",
+      "matches": [
+        [[2], [3]],
+        [[3], [4]],
+        [[4], [6]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [1],
+          "right": [1],
+          "reason": "中葡联合声明正式签署包含于左版 3 月草签段落，右版记于 4 月。",
+          "notes": {
+            "left": "此事在本版之本年 4 月处有提及",
+            "right": "此事在本版之本年 3 月处有记载"
+          }
+        },
+        {
+          "left": [3],
+          "right": [5],
+          "reason": "十三届一中全会包含于左版 10 月十三大段落，右版独立记于 11 月。",
+          "notes": {
+            "left": "此事在本版之本年 11 月处有提及",
+            "right": "此事在本版之本年 10 月处有记载"
+          }
+        }
+      ]
+    },
+    "113": {
+      "year": 1986,
+      "sourceHash": "8528f443f8641e6517492c9b09ca332a509eb8cf99d902e0092cc8399a9aecbb",
+      "matches": [
+        [[3], [1]],
+        [[7], [3]],
+        [[8], [4]],
+        [[9], [5]],
+        [[10], [6]],
+        [[11], [7]],
+        [[12], [8]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [4],
+          "right": [2],
+          "reason": "民法通则等法律分别包含于 3 月开始的人大会议和 4 月通过法律的段落。",
+          "notes": {
+            "left": "此事在本版之本年 4 月处有提及",
+            "right": "此事在本版之本年 3 月处有记载"
+          }
+        }
+      ]
+    },
+    "115": {
+      "year": 1985,
+      "sourceHash": "cf3d2863cc320ede05f245affa4c4a0da984c0838fa9a4bdb5c61622a83c19c5",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[4], [3]],
+        [[5], [5]],
+        [[6], [6]],
+        [[8], [8]],
+        [[9], [9]],
+        [[10], [10]],
+        [[11], [11]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [3],
+          "right": [4],
+          "reason": "1985 年 2 月：长城站日期不同，位于已对齐的开放区条目的前后两侧。"
+        }
+      ]
+    },
+    "117": {
+      "year": 1984,
+      "sourceHash": "f3c3d2ef42f251ec3c710094c9a56147d8ef6efd2697827b6c05eb27554523a5",
+      "matches": [
+        [[2], [1]],
+        [[4], [5]],
+        [[7], [7]],
+        [[8], [8]],
+        [[10], [9]],
+        [[12], [10]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [9],
+          "right": [12],
+          "reason": "中英联合声明正式签署包含于左版 9 月草签段落，右版记于 12 月。",
+          "notes": {
+            "left": "此事在本版之本年 12 月处有提及",
+            "right": "此事在本版之本年 9 月处有记载"
+          }
+        }
+      ]
+    },
+    "119": {
+      "year": 1983,
+      "sourceHash": "bf11fe041c7338321c4e0a8885b4ae40120414c301ea4bbb0afac11efe4d4c11",
+      "matches": [
+        [[2], [1]],
+        [[3], [2]],
+        [[4], [3]],
+        [[5], [4]],
+        [[6], [5]],
+        [[8], [6]],
+        [[9], [7]],
+        [[10], [8]]
+      ]
+    },
+    "121": {
+      "year": 1982,
+      "sourceHash": "f79e5f349bcbe9f3ed2433c1c0e486e27f58f9c04c4eccdf834eb1098205ba37",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [3]],
+        [[5], [5]],
+        [[6], [6]],
+        [[7], [7, 8]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [8],
+          "right": [11],
+          "reason": "新宪法分别包含于 11 月开始的人大会议和 12 月通过宪法的段落。",
+          "notes": {
+            "left": "此事在本版之本年 12 月处有提及",
+            "right": "此事在本版之本年 11 月处有提及"
+          }
+        }
+      ]
+    },
+    "124": {
+      "year": 1981,
+      "sourceHash": "b78df86522999a25ee75421353ae53ba034865d1932faf9979bef61a2f92dd6c",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[6], [4]],
+        [[8], [5]],
+        [[9], [6]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [4],
+          "right": [3],
+          "reason": "9 月华北演习阅兵讲话包含于右版 8 月开始的干部集训段落。",
+          "notes": {
+            "left": "此事在本版之本年 8 月处有记载",
+            "right": "此事在本版之本年 9 月处有提及"
+          }
+        }
+      ]
+    },
+    "126": {
+      "year": 1980,
+      "sourceHash": "ddcca9a0dff336276caefb7c310ebc4d4647d3cfc974b729a7c1f48407aa3489",
+      "matches": [
+        [[1], [2]],
+        [[4], [7]],
+        [[6], [8]],
+        [[7], [10]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [5],
+          "right": [9],
+          "reason": "五届全国人大三次会议及其决定分别记于 8 月和 9 月。",
+          "notes": {
+            "left": "此事在本版之本年 9 月处有提及",
+            "right": "此事在本版之本年 8 月处有记载"
+          }
+        }
+      ]
+    },
+    "128": {
+      "year": 1979,
+      "sourceHash": "d3d6d1cf34343c7e4bbc89928e0e5b6243341bb7fafb8b60e52eba2a54dc5390",
+      "matches": [
+        [[1], [1]],
+        [[3], [2]],
+        [[7], [8]],
+        [[11], [10]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [6],
+          "right": [5],
+          "reason": "经济调整方针分别包含于左版 6 月人大会议和右版 4 月工作会议。",
+          "notes": {
+            "left": "此事在本版之本年 4 月、7 月处有提及",
+            "right": "此事在本版之本年 6 月处有提及"
+          }
+        },
+        {
+          "left": [10],
+          "right": [6],
+          "reason": "10 月统一战线讲话包含于右版 6 月段落的后续记事。",
+          "notes": {
+            "left": "此事在本版之本年 6 月处有提及",
+            "right": "此事在本版之本年 10 月处有提及"
+          }
+        },
+        {
+          "left": [6],
+          "right": [7],
+          "reason": "刑法等法律分别包含于 6 月人大会议和 7 月通过法律的记事。",
+          "notes": {
+            "left": "此事在本版之本年 4 月、7 月处有提及",
+            "right": "此事在本版之本年 6 月处有提及"
+          }
+        }
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 2,
+          "otherArticleId": "126",
+          "otherYear": 1980,
+          "otherEvent": 2,
+          "otherTextHash": "a634c9fdcd054b6e47b52853739e44e5b90e064738787433bd78e31e455f0196",
+          "kind": "related",
+          "reason": "草稿拟定与次年准则通过存在政策过程关联，但会议和环节不同；保留待核对。",
+          "otherPeriod": "2 月"
+        },
+        {
+          "side": "right",
+          "event": 9,
+          "otherArticleId": "107",
+          "otherYear": 1989,
+          "otherEvent": 8,
+          "otherTextHash": "138ac4a343efbdc23ff554ce130e3af58473df04cc116ea2e1cc2ebb2fec3c3b",
+          "kind": "mentioned",
+          "reason": "另一版记载本段后续的 1989 年环境保护法，但未直接记载开头的 1979 年试行法律；按简要或部分提及提示。",
+          "otherPeriod": "12 月",
+          "otherHighlight": "１２月２６日　七届全国人大常委会第十一次会议通过《城市居民委员会组织法》、《环境保护法》和《城市规划法》。"
+        }
+      ]
+    },
+    "130": {
+      "year": 1978,
+      "sourceHash": "5f6e37523dac6b7ae140fff913e4c476664a270ad8703a067d8a906cb2f6dd5b",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [3]],
+        [[4], [4]],
+        [[5], [5]],
+        [[6], [6]],
+        [[7], [7]],
+        [[9], [8]],
+        [[11], [10]],
+        [[12], [11]],
+        [[13], [12]]
+      ]
+    },
+    "132": {
+      "year": 1977,
+      "sourceHash": "913311f74744ad1999fed79d29c79a05cad69f9ab003a052604f6a84544e7980",
+      "matches": [
+        [[2], [3, 4]],
+        [[4], [5]],
+        [[6], [6]]
+      ]
+    },
+    "134": {
+      "year": 1976,
+      "sourceHash": "4d1bf4ec173c88ad0d9bfb4a1df4b521e5200b422a80e7b6a19c3dbbc6e072a6",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [3]],
+        [[4], [5]],
+        [[5], [6]],
+        [[7], [7]],
+        [[8], [8]],
+        [[9], [9]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [2],
+          "right": [4],
+          "reason": "华国锋任命包含于左版 3 月起的群众运动段落，右版独立记于 4 月。",
+          "notes": {
+            "left": "此事在本版之本年 4 月处有提及",
+            "right": "此事在本版之本年 3 月处有提及"
+          }
+        }
+      ]
+    },
+    "137": {
+      "year": 1975,
+      "sourceHash": "6a728e75232ef599b9d4f6b3f9f542de38e604889457a722403f7acbd3406c21",
+      "matches": [
+        [[1], [1]],
+        [[3], [2]],
+        [[5], [3]]
+      ]
+    },
+    "139": {
+      "year": 1974,
+      "sourceHash": "f905439a7618f55e2fa63e1032a46d26d0a37f3c6b46f1c93cc9a3b684b17853",
+      "matches": [
+        [[1], [2]],
+        [[4], [3]]
+      ]
+    },
+    "141": {
+      "year": 1973,
+      "sourceHash": "dc5586893ca9ba769813eb65df3d90db29fc696bfc07747f8722d434d5fb4532",
+      "matches": [
+        [[2], [2]],
+        [[3], [3]],
+        [[4], [4]],
+        [[6], [6]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [3],
+          "right": [5],
+          "reason": "1973 年 8 月：十届一中全会包含于左版十大段落；右版与计算机条目交错。"
+        }
+      ]
+    },
+    "143": {
+      "year": 1972,
+      "sourceHash": "993951982695732e27670509c2cca31fecce92437c03006a294b072dfe2fdd2a",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[4], [3]]
+      ]
+    },
+    "145": {
+      "year": 1971,
+      "sourceHash": "d688fc728e84acce393f7b883b417e136511b4ab2c04198fdf94f73da102c96e",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [3]]
+      ]
+    },
+    "147": {
+      "year": 1970,
+      "sourceHash": "c4fd118f08f02904cf9f07539c773b3826b2338452175065693c5e83b06f1aa5",
+      "matches": [
+        [[1], [1]],
+        [[3], [2]]
+      ]
+    },
+    "149": {
+      "year": 1969,
+      "sourceHash": "f2da658cf3d871f8130d9c6dcfc3e5bfa5e26e22eab6ec9feb71fde92a6b831c",
+      "matches": [
+        [[1], [2, 3]],
+        [[2], [6]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [3],
+          "right": [5],
+          "reason": "1969 年 10 月：北京地铁与已对齐的自动电话条目次序相反。"
+        }
+      ]
+    },
+    "151": {
+      "year": 1968,
+      "sourceHash": "28ce18a0658b82cb715ca03cacf39a17903cd1fdfeb7415b34825f3de06fc9f5",
+      "matches": [
+        [[3], [3]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "right",
+          "event": 2,
+          "otherArticleId": "130",
+          "otherYear": 1978,
+          "otherEvent": 8,
+          "otherTextHash": "72e2645d947c46ae9e87a5e3acf42eb3522da0130b0aa885f5573b2c55be1a7a",
+          "kind": "mentioned",
+          "reason": "另一版记载本段后续的 1978 年会议和 1981 年收尾，但未直接记载开头的 1968 年指示；按简要或部分提及提示。",
+          "otherPeriod": "10 月",
+          "otherHighlight": "１０月３１日－１２月１０日　国务院召开全国知识青年上山下乡工作会议，决定调整政策，在城市积极开辟新领域、新行业，为更多的城镇中学毕业生创造就业和升学条件，逐步缩小上山下乡的范围，有安置条件的城市不再动员下乡。１９８１年１１月，国务院知青办并入国家劳动总局，历经２０余年的城镇知识青年上山下乡结束。"
+        }
+      ]
+    },
+    "158": {
+      "year": 1967,
+      "sourceHash": "b6ce094b19222b2b0ced9befc7a609b8c25ef4a2a65b4e5fd2e7d5b5aea1302a",
+      "matches": [
+        [[1], [3]],
+        [[2], [4]]
+      ]
+    },
+    "160": {
+      "year": 1966,
+      "sourceHash": "e99748f05aff30d7df9cf511be0262532f573195142d05d6651c473b945383b5",
+      "matches": [
+        [[2], [1]],
+        [[3], [2]],
+        [[5], [3]],
+        [[7], [4]]
+      ]
+    },
+    "162": {
+      "year": 1965,
+      "sourceHash": "8d079c4f40042e854c7148d7eea4405ea821489f84a11f8bd84cc156c6d752cf",
+      "matches": [
+        [[2], [3]],
+        [[4], [4]],
+        [[5], [6]]
+      ]
+    },
+    "164": {
+      "year": 1964,
+      "sourceHash": "b46d79ea413c7aece079f2ee0cb5d56869b056ec3129b765926ce142044edaf3",
+      "matches": [
+        [[3], [1]],
+        [[4], [4]],
+        [[5], [5]],
+        [[6], [6]],
+        [[7], [7]],
+        [[8], [8]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 2,
+          "otherArticleId": "174",
+          "otherYear": 1959,
+          "otherEvent": 10,
+          "otherTextHash": "81f1f19b29e9a78765937181541e688aa04858a866d0f6d82ce347b4025812ae",
+          "kind": "recorded",
+          "reason": "工业学大庆及相关通知明确记载于 1959 年发现大庆油田段落的后续记事。",
+          "otherPeriod": "9 月",
+          "otherHighlight": "1964年2月5日，中共中央发出《关于传达石油工业部〈关于大庆石油会战情况的报告〉的通知》。“工业学大庆”运动在全国展开。"
+        }
+      ]
+    },
+    "166": {
+      "year": 1963,
+      "sourceHash": "b4ea31287ba21978227f0eefbc94829743f4e82706c05ddbc48a44c198f4c253",
+      "matches": [
+        [[1], [2]],
+        [[2], [4]],
+        [[3], [5]],
+        [[5], [6]],
+        [[6], [9]],
+        [[7], [10]]
+      ]
+    },
+    "168": {
+      "year": 1962,
+      "sourceHash": "beba6b27a9065994818eebbd72d252c5e748b0f8cc97c9b678743cfe10ca5f6a",
+      "matches": [
+        [[1], [1]],
+        [[2], [4]],
+        [[4], [5]],
+        [[5], [7]]
+      ]
+    },
+    "170": {
+      "year": 1961,
+      "sourceHash": "908bf5f0ea4c64322457bb753b93762a0a3a680a032cc96f3aa87c3ff27f0898",
+      "matches": [
+        [[1], [1]],
+        [[3], [2]]
+      ]
+    },
+    "172": {
+      "year": 1960,
+      "sourceHash": "a1b926d1c679e71154d6d525f865cfe5ee7f524179c78368ffdb8d1c8af9c014",
+      "matches": [
+        [[3], [1]],
+        [[4], [2]],
+        [[7], [3]],
+        [[9], [4]],
+        [[10], [5]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 1,
+          "otherArticleId": "188",
+          "otherYear": 1952,
+          "otherEvent": 2,
+          "otherTextHash": "c88e86c42c373cec20b3c2e983233df178ab92e152278f27c866cf6b1f1bb642",
+          "kind": "mentioned",
+          "reason": "另一版概述刘家峡等工程陆续建成，未明确记载本次截流；按简要或部分提及提示。",
+          "otherPeriod": "4 月",
+          "otherHighlight": "到1978年底，新安江水电站、黄河三门峡水利枢纽、黄河青铜峡水利枢纽、丹江口水利枢纽、黄河刘家峡水利枢纽等一批水利工程陆续建成。"
+        }
+      ]
+    },
+    "174": {
+      "year": 1959,
+      "sourceHash": "99cd56d09f2986854bd976033a0f465136ac4a33b92451b70063cf64dc72724c",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [3]],
+        [[4], [4]],
+        [[5], [5]],
+        [[6], [6]],
+        [[7], [7]],
+        [[8], [8]],
+        [[10], [11]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "right",
+          "event": 10,
+          "otherArticleId": "164",
+          "otherYear": 1964,
+          "otherEvent": 2,
+          "otherTextHash": "28fb08c219dafcf43bf7b1b37531c6a94cb6249f3fa000fdd65925d00000a98b",
+          "kind": "mentioned",
+          "reason": "大庆段落含 1964 年工业学大庆；另一版有后续建设和学大庆，未直接记载本段开头的 1959 年发现油田。",
+          "otherPeriod": "2 月",
+          "otherHighlight": "２月５日　中共中央发出《关于传达石油工业部〈关于大庆石油会战情况的报告〉的通知》。“工业学大庆”运动在全国展开。自１９６０年５月起，我国集中各方面力量，经过三年多的艰苦奋斗，开发了大庆油田。到１９６３年，我国石油产品已经达到基本自给。"
+        }
+      ]
+    },
+    "176": {
+      "year": 1958,
+      "sourceHash": "376eb3aceb0a64ac4c80a8b9f3b7d3c8480d5f36d3b182f608cb845fc7f5100a",
+      "matches": [
+        [[4], [2]],
+        [[5], [3]],
+        [[8], [4]],
+        [[9], [5]],
+        [[12], [7]]
+      ]
+    },
+    "178": {
+      "year": 1957,
+      "sourceHash": "5d0f44678001ca03f89330e5e3888b950177ba8aca83a5dc6497157bd211b5b4",
+      "matches": [
+        [[1], [2]],
+        [[5], [3]],
+        [[6], [4]],
+        [[7], [5]],
+        [[8], [6]],
+        [[9], [7]],
+        [[14], [8]],
+        [[15], [9]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 3,
+          "otherArticleId": "186",
+          "otherYear": 1953,
+          "otherEvent": 7,
+          "otherTextHash": "d8f3e2357d5f801d0ea4c055ca37b174232878b1dee5999624fed9cffebd7683",
+          "kind": "mentioned",
+          "reason": "另一版仅概述武钢等企业陆续建成，没有明确对应这次开工；按简要或部分提及提示。",
+          "otherPeriod": "12 月",
+          "otherHighlight": "到1978年底，武汉钢铁联合企业、包头钢铁公司、攀枝花钢铁公司等钢铁企业陆续建成。"
+        }
+      ]
+    },
+    "180": {
+      "year": 1956,
+      "sourceHash": "a8308c70369da9268e01f70bb89905206713a494dfae1f3ba1e3f34863e73ecd",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [3]],
+        [[4], [4]],
+        [[5], [5]],
+        [[6], [6]],
+        [[7], [7]],
+        [[8], [9]],
+        [[9], [10, 11]]
+      ]
+    },
+    "182": {
+      "year": 1955,
+      "sourceHash": "230d2b06e8c41e408aedf53b443e4482813e5dc49bac6ec59c1590e25ff0558b",
+      "matches": [
+        [[1], [1]],
+        [[3], [2]],
+        [[4], [3]],
+        [[5], [4]],
+        [[6], [5]],
+        [[7], [6]],
+        [[9], [7]]
+      ]
+    },
+    "184": {
+      "year": 1954,
+      "sourceHash": "6b4e1cbc7b922a68b33700ee80792c5322f5f49fedd9e06be84feac5b1341030",
+      "matches": [
+        [[1], [3]],
+        [[2], [4]],
+        [[3], [6]],
+        [[4], [7]],
+        [[5], [8]],
+        [[7], [10]],
+        [[8], [11]]
+      ]
+    },
+    "186": {
+      "year": 1953,
+      "sourceHash": "e2ee900e83dc7bc2d57c1f9c04c7812d56193eedefde5528407d0ee2670f787b",
+      "matches": [
+        [[2], [1]],
+        [[3], [3]],
+        [[4], [4]],
+        [[6], [5]],
+        [[8], [6]],
+        [[10], [7]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [1],
+          "right": [8],
+          "reason": "第一个五年计划分别记于 1 月和年内记事。",
+          "notes": {
+            "left": "此事在本版之本年全年处有记载",
+            "right": "此事在本版之本年 1 月处有提及"
+          }
+        }
+      ]
+    },
+    "188": {
+      "year": 1952,
+      "sourceHash": "5a4fcc4769721077c57a03c550ff955db35bfb0ac30d552f44c0053e574a9263",
+      "matches": [
+        [[1], [1]],
+        [[4], [4]],
+        [[5], [5]],
+        [[6], [6]]
+      ],
+      "unalignedRelations": [
+        {
+          "left": [2],
+          "right": [9],
+          "reason": "院系调整分别记于 6 月和年内记事。",
+          "notes": {
+            "left": "此事在本版之本年全年处有记载",
+            "right": "此事在本版之本年 6 月处有提及"
+          }
+        }
+      ],
+      "crossYearRelations": [
+        {
+          "side": "right",
+          "event": 7,
+          "otherArticleId": "192",
+          "otherYear": 1950,
+          "otherEvent": 14,
+          "otherTextHash": "f9b242793962699efe5a177bd8e6c93b476255437dbbe66f9b1cca2d5a0b83de",
+          "kind": "recorded",
+          "reason": "扫除文盲工作委员会成立收在 1950 年工农教育会议段落的后续记事。",
+          "otherPeriod": "9 月",
+          "otherHighlight": "１９５２年１１月１５日，中央人民政府扫除文盲工作委员会成立。扫除文盲运动在全国大规模展开。"
+        }
+      ]
+    },
+    "190": {
+      "year": 1951,
+      "sourceHash": "6adb68bf88a8c124fd2c32cab92f197add478d29ac882067e43aee5526f8b53f",
+      "matches": [
+        [[1], [1]],
+        [[2], [4]],
+        [[3], [5]],
+        [[5], [7]]
+      ]
+    },
+    "192": {
+      "year": 1950,
+      "sourceHash": "91cb821413db972c53ff5bae7c4e6708a4ee7aa44a1d8dfdd677766cdb0d9382",
+      "matches": [
+        [[1], [1]],
+        [[2], [4]],
+        [[3], [5]],
+        [[5], [7]],
+        [[6], [8]],
+        [[7], [9]],
+        [[9], [10]],
+        [[10], [11]],
+        [[11], [12]],
+        [[12], [13]],
+        [[14], [14]],
+        [[16], [15]],
+        [[17], [16]],
+        [[18], [17]],
+        [[19], [19]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "right",
+          "event": 3,
+          "otherArticleId": "194",
+          "otherYear": 1949,
+          "otherEvent": 14,
+          "otherTextHash": "776a81d8b5b6813a70bd05bbfaa11e7d2ca8ff03885598f749f361c39e0f22c0",
+          "kind": "recorded",
+          "reason": "中苏条约及访苏记事收在 1949 年毛泽东访苏段落。",
+          "otherPeriod": "12 月",
+          "otherHighlight": "１２月１６日　毛泽东抵达莫斯科对苏联进行为期两个月的访问。１９５０年２月１４日，中苏两国政府全权代表周恩来、维辛斯基签署《中苏友好同盟互助条约》，《中苏关于中国长春铁路、旅顺口及大连的协定》和《中苏关于贷款给中华人民共和国的协定》。"
+        }
+      ]
+    },
+    "194": {
+      "year": 1949,
+      "sourceHash": "a3f8dbb692bef47c0812cce56cc8d95e7f81d2ac0644d8247894a2987e6b4a59",
+      "matches": [
+        [[1], [1]],
+        [[2], [2]],
+        [[3], [3]],
+        [[5], [4]],
+        [[6], [6]],
+        [[8], [7]],
+        [[9], [8]],
+        [[10], [9]],
+        [[11], [10]],
+        [[13], [11]],
+        [[15], [12]]
+      ],
+      "crossYearRelations": [
+        {
+          "side": "left",
+          "event": 12,
+          "otherArticleId": "188",
+          "otherYear": 1952,
+          "otherEvent": 6,
+          "otherTextHash": "c64d90e638f8d72a1205b96d76bfafa36c89837cdf9ba2d0754c999dedd609d4",
+          "kind": "recorded",
+          "reason": "内蒙古自治区人民政府更名明确记载于 1952 年民族区域自治实施纲要段落。",
+          "otherPeriod": "8 月",
+          "otherHighlight": "此前，成立于1947年5月1日的内蒙古自治政府于1949年12月2日改称内蒙古自治区人民政府。"
+        },
+        {
+          "side": "left",
+          "event": 14,
+          "otherArticleId": "192",
+          "otherYear": 1950,
+          "otherEvent": 3,
+          "otherTextHash": "5eb0b4ad1dd2a52d5651abbd3e3d00332eda8b562a82d76edcba9da8f203792f",
+          "kind": "recorded",
+          "reason": "毛泽东访苏及中苏条约收在 1950 年签订条约的段落。",
+          "otherPeriod": "2 月",
+          "otherHighlight": "2月14日 中国同苏联签订《中苏友好同盟互助条约》及有关协定。1949年12月至1950年2月，毛泽东对苏联进行为期两个多月的访问。"
+        }
+      ]
+    }
+  }
+}
