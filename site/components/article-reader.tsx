@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronRight, Clock3, Minus, Plus } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronRight, Clock3, Minus, Plus } from 'lucide-react';
 import { articles, annualChronicles, articleHref, categoryHref, basePath, shortTitle, periods, displayCategory, articlesForCategory, absoluteUrl, chronicleViewHref } from '@/lib/content';
 import { formatChronicle } from '@/lib/chronicles.mjs';
 import { serializeJsonLd } from '@/lib/seo';
@@ -65,12 +65,8 @@ export default function ArticleReader({ article, view = '2009' }: { article: typ
       <article className="reading-article">
         <header className="article-heading"><span className="eyebrow">{displayCategory(article.category)} {periods[article.id] ? ` / ${periods[article.id]}` : ''}</span><h1>{article.title}</h1><div className="article-meta"><span><Clock3 size={14}/> 约 {article.minutes} 分钟阅读</span><div className="font-controls" aria-label="阅读字号"><button type="button" data-font="smaller" aria-label="缩小正文字号"><Minus size={13}/></button><span>字</span><button type="button" data-font="larger" aria-label="放大正文字号"><Plus size={13}/></button></div></div></header>
         {annual && <ChronicleVersions id={id} view={view}/>}
-        {/* Frozen archive context: retained for future use, hidden from the reading UI. */}
-        <div className="archive-notice" hidden>存档原文<span>本篇保留原站措辞与历史数据；资料中的时间表述及部分结论反映原文写作时点。</span></div>
         {formatted.headings.length > 0 && <details className="article-toc"><summary>本篇目录 <span>{formatted.headings.length} 个章节</span></summary><nav aria-label="本篇目录">{formatted.headings.map(heading => <a key={heading.id} href={`#${heading.id}`}>{heading.title}</a>)}</nav></details>}
         <div className="prose" id="article-body" dangerouslySetInnerHTML={{ __html: body }}/>
-        {/* Frozen source panel; provenance remains in the corpus and this hidden block. */}
-        <div className="article-source" id="source" hidden><span className="eyebrow">资料出处</span><p>资料来源：{article.source}。{article.archiveUrl ? '正文从 2021 年 4 月 19 日首页快照恢复，' : ''}版权归原作者所有。</p>{article.archiveUrl && <a href={article.archiveUrl} target="_blank" rel="noreferrer">查看 Internet Archive 存档 <ArrowUpRight size={14}/></a>}</div>
         <nav className="article-pagination" aria-label="相邻文章">{previous ? <Link href={href(previous.id)}><span><ArrowLeft size={14}/> 上一篇</span><strong>{shortTitle(previous.title)}</strong></Link> : <Link href={annual ? categoryHref('大事记') : '/'}><span><ArrowLeft size={14}/> 返回</span><strong>{annual ? '现代史·大事记目录' : '中国历史学习网首页'}</strong></Link>}{next && <Link href={href(next.id)}><span>下一篇 <ArrowRight size={14}/></span><strong>{shortTitle(next.title)}</strong></Link>}</nav>
       </article>
     </div>

@@ -65,8 +65,10 @@ for a in articles:
         body=re.search(r'<div class="prose" id="article-body">(.*?)</div>',p.read_text(),re.S)
         content=Page(); content.feed(re.sub(r'<h2[^>]*data-chronicle-month="true"[^>]*>.*?</h2>', '', body[1] if body else '', flags=re.S))
         markup=p.read_text()
-        assert re.search(r'<div[^>]*class="archive-notice"[^>]*hidden',markup), 'Archive note must remain frozen and hidden'
-        assert re.search(r'<div[^>]*class="article-source"[^>]*hidden',markup), 'Source panel must remain frozen and hidden'
+        assert 'archive-notice' not in markup, 'Removed archive note returned to article HTML'
+        assert 'article-source' not in markup, 'Removed source panel returned to article HTML'
+        if a.get('archiveUrl'):
+            assert a['archiveUrl'] not in markup, 'Article archive URL leaked into generated HTML'
         assert '旧站存档 · 2021.04.19' not in markup
         expected_lines=[line.strip() for line in re.split(r'\n+',a['text']) if line.strip()]
         sources=[unwrap_source(line) for line in expected_lines if re.match(r'^[（(]?来源[：:]',line)]
@@ -118,6 +120,13 @@ assert '中国历史学习网（Chinese History Learning Network）是一个没�
 assert '历史资料出于学术目的整理、转载自《中华人民共和国年鉴》《中华人民共和国大事记》等文献' in about
 assert '本网站所载资料具有其写作年代的表述与信息边界' in about
 assert 'class="source-facts"' not in about and '首页存档日期' not in about and '>存档日期<' not in about
+assert re.search(r'<a class="about-archive-link"[^>]+rel="nofollow noreferrer"',about), 'About archive link must be nofollow and noreferrer'
+published_html='\n'.join((SITE/name).read_text() for name in generated if name.endswith('.html'))
+assert published_html.count('web.archive.org/')==1, 'Only the visible About archive link may be published'
+assert 'www.miitbeian.gov.cn' not in published_html, 'Obsolete filing-system URL remains'
+for name in (name for name in generated if name.endswith('.html')):
+    html=(SITE/name).read_text()
+    assert re.search(r'<a class="icp-link" href="https://beian\.miit\.gov\.cn"[^>]+rel="nofollow noreferrer"',html), f'{name}: filing link is incorrect'
 if errors:
     print('\n'.join(errors)); raise SystemExit(f'{len(errors)} portable checks failed')
 print(f'PASS: {len(parsed)} HTML pages; all local assets, links and anchors resolve; all {len(articles)} base articles present (83 recovered records retained); two embedded fonts; no module scripts or network dependencies.')
