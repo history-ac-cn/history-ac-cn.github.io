@@ -49,7 +49,7 @@ npm run dev
 npm run build
 ```
 
-构建命令会预渲染全部页面，生成 `site/dist/pages/`、`preview/`、根目录入口和 404 页面，随后检查文章完整性、站内链接、锚点、嵌入资源、搜索、交互、导航行为与首页资源体积。
+构建命令会预渲染全部页面，生成 `site/dist/pages/`、`preview/`、根目录入口和 404 页面，随后检查文章完整性、站内链接、锚点、嵌入资源、搜索、交互、导航行为与全站各页的资源体积。
 
 已有构建产物可以单独验证：
 
@@ -124,22 +124,27 @@ npm run typecheck
 
 源码使用 React、TypeScript、Vinext 和 Vite。构建过程会将应用预渲染为完整 HTML、CSS 和少量普通 JavaScript，并移除框架运行时、RSC 数据、模块脚本和网络数据请求。即使禁用 JavaScript，文章正文仍然可以阅读。
 
-站内搜索使用随页面发布的本地索引，仅搜索页加载，搜索内容不会发送到外部服务。导航脚本会在线上环境中规范化 `index` 和 `index.html` 地址，在本地文件环境中则自动切换为明确的 HTML 文件路径。
+站内搜索使用随页面发布的本地索引，仅搜索页加载，搜索内容不会发送到外部服务。首次显示全部文章时不处理全文；输入查询后按需规范化文本并缓存，后续输入复用处理结果。导航脚本会在线上环境中规范化 `index` 和 `index.html` 地址，在本地文件环境中则自动切换为明确的 HTML 文件路径。
 
-样式构建仅扫描实际使用的页面与组件，不包含备用 UI 组件库。首页的资源体积检查包含 HTML、CSS、脚本、图片、图标和所需字体，以未经过 HTTP 压缩的文件大小计算；这项检查用于防止资源体积回退，不代表特定网络环境中的加载耗时。
+样式构建仅扫描实际使用的页面与组件，不包含备用 UI 组件库。发布页在 HTML 内直接执行小型主题初始化脚本，减少一次阻塞显示的请求；其余外部脚本均延后执行。全站 224 页均检查 HTML、CSS、脚本、图片、图标和所需字体的体积，按页面类型设置资源预算，并检查字库覆盖与离线回退。这些数据按未经过 HTTP 压缩的文件大小计算，用于防止资源体积回退，不代表特定网络环境中的加载耗时。
 
 ## 字体与图形资源
 
-网站使用经过子集化的 Noto Serif SC 和 Noto Sans SC 可变字体，分别命名为 `History Serif` 和 `History Sans`。在线页面通过小型字体样式表加载本站的 WOFF2 字体。发布版首页使用 `unicode-range` 加载常用字符；正文等内页使用完整的站点字体子集，保留中文连续排版中的字形处理与精确换行。各字体文件可独立缓存。本地 `file://` 页面自动改用 CSS data URL 嵌入版，以兼容本地字体文件访问限制。两种方式沿用相同的字形和字重，无需外部字体服务。字体采用 SIL Open Font License 1.1；文件、许可证与哈希清单位于 `site/public/assets/fonts/`。
+网站使用经过子集化的 Noto Serif SC 和 Noto Sans SC 可变字体，分别命名为 `History Serif` 和 `History Sans`。在线页面通过小型字体样式表加载本站的 WOFF2 字体。发布版按页面类型及大事记年代共享 14 组字库，同一年代的两个版本、各年份正文及对比页复用相同文件。每种字体完整覆盖该组页面所需字符，不把连续正文拆成多个 `unicode-range` 分区，以保留中文标点处理与换行。搜索页的无衬线字体保留完整站点字库，用于任意查询输入和动态全文摘录。
+
+字体文件名包含内容哈希，可独立缓存。构建时检查当前页面和动态界面文案的字符覆盖；若新增文字超出预备字库，会整页回退到原完整字体并输出维护提示，避免丢字或改变连续排版。准备字库的脚本保留全部排版特性、可变字重和字符宽度。做法参考 [fontTools 子集化文档](https://fonttools.readthedocs.io/en/latest/subset/)。预备字库会增加仓库中的字体文件，但浏览器仅下载当前页所用的一组；跨年代阅读时会加载对应的另一组。
+
+本地 `file://` 页面仍自动改用 CSS data URL 嵌入版，以兼容本地字体文件访问限制。在线和离线方式沿用相同的字形和字重，无需外部字体服务。字体采用 SIL Open Font License 1.1；文件、许可证与哈希清单位于 `site/public/assets/fonts/`。
 
 字体子集仅覆盖当前站点文字。加入新字后，如需避免系统字体回退，可以下载 [Noto Serif SC](https://github.com/google/fonts/tree/main/ofl/notoserifsc) 和 [Noto Sans SC](https://github.com/google/fonts/tree/main/ofl/notosanssc) 的原始可变 TTF，安装 `fonttools[woff]`，然后运行：
 
 ```sh
 python3 scripts/subset-fonts.py /path/to/NotoSerifSC.ttf /path/to/NotoSansSC.ttf
+python3 scripts/optimize-page-fonts.py
 npm run build
 ```
 
-字体刷新会同时生成完整嵌入版与在线分段版。若只修改了首页文案，可在构建后运行 `python3 scripts/optimize-fonts.py`，再重新构建，以更新常用字符分组；该命令同样需要 `fonttools[woff]`。常规构建直接使用仓库中的生成字体，不需要安装字体处理工具。
+字体刷新会生成完整嵌入版，再根据现有 `preview/` 页面准备各组在线字库。更新文案或新增文章后，先构建完整页面；若构建提示使用完整字体回退，再运行 `python3 scripts/optimize-page-fonts.py` 并重新构建。该命令需要 `fonttools[woff]`；常规构建仅选择仓库中已生成的字库，不需要安装字体处理工具。原首页分段字库及 `scripts/optimize-fonts.py` 保留供维护参考，发布页改用上述完整分组字库。
 
 新版 logo 延续了原站由站长绘制的蓝色环带地球构图。网页使用适合页眉及关于页尺寸的 WebP 图片，保留至少四倍显示尺寸的像素并采用无损编码，原始 PNG 仍用于分享元数据和原图留存。关于页图片在缩放后进一步无损压缩，并省略完全透明像素中不可见的颜色数据，保持可见像素和透明度不变。更换原图后可在安装了 `cwebp` 的 macOS 环境运行 `sh scripts/optimize-logo.sh` 重新生成网页图片和图标。恢复参考资料仅保存在本地 `recovery/`，不随仓库分发；构建所需图片均在 `site/public/assets/`。界面图标来自 [Lucide](https://lucide.dev/)，其 ISC 许可证随网站资源一并保留。
 

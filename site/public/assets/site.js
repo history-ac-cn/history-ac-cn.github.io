@@ -1,28 +1,44 @@
 /* Small, dependency-free enhancements. Classic scripts also work over file://. */
 (() => {
   const normalize = value => String(value).normalize('NFKC').toLocaleLowerCase().replace(/\s+/g, ' ').trim();
+  let indexedRecords = null;
+  let recordsById = new Map();
+  const normalizedRecords = new Map();
   const search = value => {
     const input = document.getElementById('search-input');
     if (!input) return;
     input.value = value;
     const query = normalize(value), terms = query.split(' ').filter(Boolean);
     const records = window.HISTORY_SEARCH || [];
-    const recordsById = new Map(records.map(record => [record.id, record]));
+    if (records !== indexedRecords) {
+      indexedRecords = records;
+      recordsById = new Map(records.map(record => [record.id, record]));
+      normalizedRecords.clear();
+    }
     let count = 0;
     document.querySelectorAll('[data-article-id]').forEach(row => {
       const record = recordsById.get(row.dataset.articleId);
-      const haystack = normalize(record ? record.title + ' ' + record.text : row.textContent);
+      // The initial, unfiltered catalog needs no full-text normalization. Cache
+      // it on the first query so later keystrokes don't rescan the entire corpus.
+      let haystack = '';
+      if (terms.length) {
+        if (record && !normalizedRecords.has(record.id)) {
+          const text = normalize(record.text);
+          normalizedRecords.set(record.id, { text, haystack: normalize(record.title) + ' ' + text });
+        }
+        haystack = record ? normalizedRecords.get(record.id).haystack : normalize(row.textContent);
+      }
       const match = terms.every(term => haystack.includes(term));
       row.hidden = !match;
       if (match) count++;
       const paragraph = row.querySelector('p');
-      if (paragraph && record) {
+      if (paragraph && record && match) {
         let excerpt = record.excerpt;
         if (query) {
-          const position = normalize(record.text).indexOf(terms[0]);
+          const position = normalizedRecords.get(record.id).text.indexOf(terms[0]);
           if (position >= 0) excerpt = (position > 25 ? '…' : '') + record.text.slice(Math.max(0, position - 25), Math.max(0, position - 25) + 125).replace(/\s+/g, ' ') + '…';
         }
-        paragraph.textContent = excerpt;
+        if (paragraph.textContent !== excerpt) paragraph.textContent = excerpt;
       }
     });
     document.getElementById('search-status').textContent = query ? `“${value.trim()}” · 找到 ${count} 篇文章` : `全部 ${count} 篇文章`;

@@ -17,7 +17,7 @@ class Page(HTMLParser):
             if key in a: self.references.append((tag,key,a[key],a.get('rel','')))
         if tag=='script':
             self.in_script=True
-            if a.get('type')!='application/ld+json' and (a.get('type')=='module' or 'src' not in a): self.modules.append(a)
+            if a.get('type')!='application/ld+json' and (a.get('type')=='module' or ('src' not in a and 'data-theme-bootstrap' not in a)): self.modules.append(a)
     def handle_endtag(self,tag):
         if tag=='script': self.in_script=False
     def handle_data(self,d):

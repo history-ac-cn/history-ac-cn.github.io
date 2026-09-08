@@ -2,6 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { chronicleTextForDisplay } from '../site/lib/chronicles.mjs';
 import { searchableArticles } from '../site/lib/chronicle-editions.mjs';
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -15,6 +16,7 @@ const articles = [...recoveredArticles, ...additions].filter(article => !exclude
 const categoryAliases = new Map(['现代史', '大事记'].map(name => [`/archives/category/${name}`, '/archives/category/现代史·大事记']));
 const walk = async dir => (await Promise.all((await fs.readdir(dir, { withFileTypes: true })).map(async entry => entry.isDirectory() ? walk(path.join(dir, entry.name)) : [path.join(dir, entry.name)]))).flat();
 const htmlFiles = (await walk(exported)).filter(f => f.endsWith('.html'));
+const themeBootstrap = await fs.readFile(path.join(root, 'site/public/assets/theme.js'), 'utf8');
 if (htmlFiles.length < 90) throw new Error(`Expected at least 90 exported pages; got ${htmlFiles.length}.`);
 const routeMap = new Map();
 for (const file of htmlFiles) {
@@ -64,9 +66,6 @@ for (const file of htmlFiles) {
   html = html.replace(/<script\b(?![^>]*\btype=["']application\/ld\+json["'])[^>]*>[\s\S]*?<\/script>/gi, '');
   html = html.replace(/<link\b(?=[^>]*\brel="(?:modulepreload|preload|prefetch)")[^>]*>/gi, '');
   html = html.replace(/\sdata-(?:rsc-css-href|precedence)="[^"]*"/g, '');
-  // The homepage only needs common glyphs. Reading pages keep each font in one
-  // file so CJK shaping across subset boundaries cannot change prose line breaks.
-  if (relative === 'index.html') html = html.replace('/assets/fonts/fonts.css', '/assets/fonts/fonts-home.css');
   html = html.replace(/<html\b/, '<html data-portable="true"');
   html = html.replace(/\b(href|src)="([^"]+)"/g, (_, attr, url) => {
     const local = toRelative(url, relative);
@@ -94,11 +93,17 @@ for (const file of htmlFiles) {
     if (current === destination) return `<a${attrs} aria-current="page">`;
     return a;
   }));
-  html = html.replace('</head>', `<script src="${toRelative('/assets/theme.js', relative)}"></script></head>`);
+  // Apply theme and file:// fonts before paint, without a blocking JS request.
+  html = html.replace('</head>', `<script data-theme-bootstrap>${themeBootstrap.replaceAll('</script', '<\\/script')}</script></head>`);
   const scripts = `<script src="${toRelative('/assets/navigation.js', relative)}" defer></script>` + (relative.startsWith('search/') ? `<script src="${toRelative('/assets/search-index.js', relative)}" defer></script>` : '') + `<script src="${toRelative('/assets/site.js', relative)}" defer></script>`;
   html = html.replace('</body>', scripts + '</body>');
   await write(relative, html);
 }
+// Select complete, cached font pairs per page type / decade. This step uses
+// Python's standard library and safely falls back for newly added characters.
+process.stdout.write(execFileSync('python3', [path.join(root, 'scripts/select-page-fonts.py'), output], {
+  input: JSON.stringify(written), encoding: 'utf8',
+}));
 // A portable 404 also helps GitHub Pages visitors recover from obsolete links.
 let home = await fs.readFile(path.join(output, 'index.html'), 'utf8');
 if (!written.includes('404.html')) {

@@ -42,6 +42,18 @@ window.HistorySite.search('2010 2019'); assert(visible().includes('67')); assert
 window.HistorySite.search('zzzz-no-such-history-2468'); assert.equal(visible().length, 0); assert.equal(empty.hidden, false);
 window.HistorySite.search('<img src=x onerror=alert(1)>'); assert.equal(visible().length, 0);
 window.HistorySite.search('  '); assert.equal(visible().length, articles.length);
+// An empty query must not read full article bodies. Subsequent unmatched
+// queries reuse normalized text, and a replaced index invalidates that cache.
+const savedRecords = window.HISTORY_SEARCH;
+let bodyReads = 0;
+window.HISTORY_SEARCH = [{ ...savedRecords[0], get text() { bodyReads++; return '缓存验证甲'; } }];
+window.HistorySite.search(''); assert.equal(bodyReads, 0);
+window.HistorySite.search('zzzz-no-match'); assert.equal(bodyReads, 1);
+window.HistorySite.search('yyyy-no-match'); assert.equal(bodyReads, 1);
+window.HISTORY_SEARCH = [{ ...savedRecords[0], text: '缓存验证乙' }];
+window.HistorySite.search('缓存验证乙'); assert(visible().includes(savedRecords[0].id));
+window.HISTORY_SEARCH = savedRecords;
+window.HistorySite.search(''); assert.equal(visible().length, articles.length);
 const clickFont = control => listeners.click({ target: { closest: s => s === '[data-font]' ? control : null } });
 for (let i=0;i<20;i++) clickFont(larger); assert.equal(body.style.fontSize, '26px'); assert(larger.disabled);
 for (let i=0;i<20;i++) clickFont(smaller); assert.equal(body.style.fontSize, '16px'); assert(smaller.disabled);

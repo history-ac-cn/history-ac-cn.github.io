@@ -84,7 +84,11 @@ const generated = JSON.parse(fs.readFileSync(path.join(output, 'generated-files.
 assert(generated.includes('assets/theme.js'), 'Theme bootstrap is missing from the publish manifest.');
 for (const relative of generated.filter(file => file.endsWith('.html'))) {
   const html = fs.readFileSync(path.join(output, relative), 'utf8');
-  assert.equal((html.match(/<script\b[^>]*src="[^"]*assets\/theme\.js"[^>]*><\/script>/g) || []).length, 1, `${relative}: expected one theme bootstrap.`);
+  const bootstraps = [...html.matchAll(/<script data-theme-bootstrap>([\s\S]*?)<\/script>/g)];
+  assert.equal(bootstraps.length, 1, `${relative}: expected one inline theme bootstrap.`);
+  assert.equal(bootstraps[0][1], themeScript, `${relative}: bootstrap must match the verified theme script.`);
+  assert(!/<script\b[^>]*src="[^"]*assets\/theme\.js"/.test(html), `${relative}: blocking theme request returned.`);
+  assert(html.indexOf('<script data-theme-bootstrap>') < html.indexOf('</head>'), `${relative}: theme must be applied before paint.`);
 }
 const about = fs.readFileSync(path.join(output, 'about/index.html'), 'utf8');
 for (const choice of ['system', 'light', 'dark']) assert(about.includes(`data-theme-choice="${choice}"`), `About page is missing the ${choice} choice.`);
