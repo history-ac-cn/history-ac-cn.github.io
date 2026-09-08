@@ -126,7 +126,7 @@ assert published_html.count('web.archive.org/')==1, 'Only the visible About arch
 assert 'www.miitbeian.gov.cn' not in published_html, 'Obsolete filing-system URL remains'
 for name in (name for name in generated if name.endswith('.html')):
     html=(SITE/name).read_text()
-    assert re.search(r'<a class="icp-link" href="https://beian\.miit\.gov\.cn"[^>]+rel="nofollow noreferrer"',html), f'{name}: filing link is incorrect'
+    assert re.search(r'<a class="icp-link" href="https://beian\.miit\.gov\.cn"[^>]+rel="nofollow noreferrer">京ICP备19010237号-1</a>',html), f'{name}: filing link or number is incorrect'
 if errors:
     print('\n'.join(errors)); raise SystemExit(f'{len(errors)} portable checks failed')
 print(f'PASS: {len(parsed)} HTML pages; all local assets, links and anchors resolve; all {len(articles)} base articles present (83 recovered records retained); two embedded fonts; no module scripts or network dependencies.')

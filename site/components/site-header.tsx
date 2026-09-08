@@ -14,5 +14,5 @@ export function SiteHeader() {
   </div></header>;
 }
 export function SiteFooter() {
-  return <footer className="site-footer"><div className="shell footer-main"><div><Link href="/" className="footer-brand">中国历史学习网<span>HISTORY.AC.CN</span></Link><p>半小时搞定千年中国史</p></div><div className="footer-links"><Link href="/about/">关于本站</Link></div></div><div className="shell footer-bottom"><a className="icp-link" href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noreferrer">京ICP备19010237号</a><span>无广告 · 自由阅读</span></div></footer>;
+  return <footer className="site-footer"><div className="shell footer-main"><div><Link href="/" className="footer-brand">中国历史学习网<span>HISTORY.AC.CN</span></Link><p>半小时搞定千年中国史</p></div><div className="footer-links"><Link href="/about/">关于本站</Link></div></div><div className="shell footer-bottom"><a className="icp-link" href="https://beian.miit.gov.cn" target="_blank" rel="nofollow noreferrer">京ICP备19010237号-1</a><span>无广告 · 自由阅读</span></div></footer>;
 }
