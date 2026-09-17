@@ -2,9 +2,10 @@
 from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
-import json, re
+import json, os, re
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'preview'
+PUBLISH = ROOT / 'site/dist/pages'
 errors = []
 class Page(HTMLParser):
     def __init__(self):
@@ -24,6 +25,28 @@ class Page(HTMLParser):
         if not self.in_script: self.text.append(d)
 parsed={}
 generated=json.loads((SITE/'generated-files.json').read_text())
+portable_only={
+    'assets/fonts/README.txt',
+    'assets/fonts/embedded.css',
+    'assets/fonts/fonts-home.css',
+    'assets/fonts/fonts.css',
+    'assets/fonts/history-sans-common.woff2',
+    'assets/fonts/history-sans.woff2',
+    'assets/fonts/history-serif-common.woff2',
+    'assets/fonts/history-serif.woff2',
+    'assets/fonts/manifest.json',
+    'assets/fonts/optimized/manifest.json',
+    'assets/fonts/subsets.json',
+    'assets/logo-original.png',
+    'assets/theme.js',
+}
+published={str(p.relative_to(PUBLISH)) for p in PUBLISH.rglob('*') if p.is_file()}
+assert published==set(generated)-portable_only, 'Published artifact contains missing or unintended files'
+assert 'generated-files.json' not in published, 'Internal generated-file manifest must not be public'
+assert not any(name=='preview' or name.startswith('preview/') for name in published), 'Portable preview must not be public'
+pages_base=(os.environ.get('PAGES_BASE_PATH','').rstrip('/') + '/')
+assert f'<base href="{pages_base}">' in (PUBLISH/'404.html').read_text(), 'Published 404 page needs a stable asset base'
+assert all('data-file-href=' not in (PUBLISH/name).read_text() for name in published if name.endswith('.html')), 'Public HTML exposes portable file paths'
 for p in (SITE / name for name in generated if name.endswith('.html')):
     parser=Page(); parser.feed(p.read_text()); parsed[p.resolve()]=parser
     if parser.modules: errors.append(f'Nonportable runtime: {p.relative_to(SITE)}')

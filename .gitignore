@@ -11,4 +11,7 @@ site/.vite/
 !.env.example
 /recovery/
 /sidenote/
+/preview/
+/index.html
+/404.html
 __pycache__/

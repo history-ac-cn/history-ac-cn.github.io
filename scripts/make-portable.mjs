@@ -80,11 +80,6 @@ for (const file of htmlFiles) {
   if (relative === '404.html') {
     html = html.replace('<html ', `<html data-not-found="true" data-retired-article-href="${toRelative('/archives/category/现代史·大事记', relative)}" `);
     html = html.replace(/<title>.*?<\/title>/, '<title>页面未找到 · 中国历史学习网</title>');
-    if (process.env.PAGES_BUILD === 'true') {
-      const pagesBase = (process.env.PAGES_BASE_PATH || '').replace(/\/$/, '') + '/';
-      if (!/^\/[a-zA-Z0-9_./-]*$/.test(pagesBase) || pagesBase.startsWith('//')) throw new Error('Invalid Pages base path');
-      html = html.replace('<head>', `<head><base href="${pagesBase}">`);
-    }
   }
   // Set active navigation from the exported page, independent of browser hydration.
   html = html.replace(/(<nav class="main-nav[^]*?<\/nav>)/, nav => nav.replace(/ aria-current="page"/g, '').replace(/<a\b([^>]*href="([^"]+)"[^>]*)>/g, (a, attrs, href) => {
@@ -123,10 +118,38 @@ await fs.writeFile(path.join(output, 'generated-files.json'), JSON.stringify(wri
 const publish = path.join(root, 'site/dist/pages');
 await fs.rm(publish, { recursive: true, force: true });
 await fs.mkdir(publish, { recursive: true });
-for (const relative of written) {
+const portableOnly = new Set([
+  'assets/fonts/README.txt',
+  'assets/fonts/embedded.css',
+  'assets/fonts/fonts-home.css',
+  'assets/fonts/fonts.css',
+  'assets/fonts/history-sans-common.woff2',
+  'assets/fonts/history-sans.woff2',
+  'assets/fonts/history-serif-common.woff2',
+  'assets/fonts/history-serif.woff2',
+  'assets/fonts/manifest.json',
+  'assets/fonts/optimized/manifest.json',
+  'assets/fonts/subsets.json',
+  'assets/logo-original.png',
+  'assets/theme.js',
+]);
+const publishedFiles = written.filter(relative => !portableOnly.has(relative));
+for (const relative of publishedFiles) {
   const destination = path.join(publish, relative);
   await fs.mkdir(path.dirname(destination), { recursive: true });
-  await fs.copyFile(path.join(output, relative), destination);
+  if (relative.endsWith('.html')) {
+    const publicHtml = (await fs.readFile(path.join(output, relative), 'utf8')).replace(/\sdata-file-href="[^"]*"/g, '');
+    await fs.writeFile(destination, publicHtml);
+  } else {
+    await fs.copyFile(path.join(output, relative), destination);
+  }
 }
-await fs.writeFile(path.join(publish, 'generated-files.json'), JSON.stringify(written, null, 2) + '\n');
-console.log(`Portable site: ${htmlFiles.length} pages (including 404), ${written.length} files. Open index.html at the repository root.`);
+// Published 404 pages can be served for arbitrarily deep missing paths. Give
+// their relative styles, images and navigation a stable public base without
+// changing the portable copy used over file://.
+const pagesBase = (process.env.PAGES_BASE_PATH || '').replace(/\/$/, '') + '/';
+if (!/^\/[a-zA-Z0-9_./-]*$/.test(pagesBase) || pagesBase.startsWith('//')) throw new Error('Invalid Pages base path');
+const published404Path = path.join(publish, '404.html');
+const published404 = (await fs.readFile(published404Path, 'utf8')).replace('<head>', `<head><base href="${pagesBase}">`);
+await fs.writeFile(published404Path, published404);
+console.log(`Portable site: ${htmlFiles.length} pages (including 404), ${written.length} offline files, ${publishedFiles.length} public files. Open index.html at the repository root.`);
