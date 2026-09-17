@@ -100,6 +100,8 @@ for (const alias of ['现代史', '大事记']) {
 
 const searchHtml = await fs.readFile(pageFile('/search/'), 'utf8');
 check(robotsValues(searchHtml).some(value => /\bnoindex\b/i.test(value)), '/search/: search results must be noindex.');
+const homeHtml = await fs.readFile(pageFile('/'), 'utf8');
+check(!homeHtml.includes('SearchAction') && !homeHtml.includes('search_term_string'), 'SearchAction URL template must not be published.');
 const notFoundHtml = await fs.readFile(path.join(output, '404.html'), 'utf8');
 const notFoundRobots = robotsValues(notFoundHtml);
 check(notFoundRobots.length === 1 && /\bnoindex\b/i.test(notFoundRobots[0]), `404: expected one noindex directive; found ${notFoundRobots.length}.`);
